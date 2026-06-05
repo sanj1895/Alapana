@@ -1234,10 +1234,22 @@ function TalaSwaraTranscriber({ sa, setSa }) {
 
 // ─── Raga Practice: browser ───────────────────────────────────────────────────
 
-function RagaPractice({ sa }) {
+function RagaPractice({ sa, initialRaga }) {
     const [search, setSearch] = useState('');
-    const [selected, setSelected] = useState(null);
+    const allRagas = Object.entries(RAGAS);
+    const [selected, setSelected] = useState(() => {
+        if (!initialRaga) return null;
+        const entry = allRagas.find(([name]) => name === initialRaga);
+        return entry || null;
+    });
     const [masteredRagas, setMasteredRagas] = useState([]);
+
+    // If a new initialRaga is pushed in (navigation from workspace), jump straight to that raga
+    useEffect(() => {
+        if (!initialRaga) return;
+        const entry = allRagas.find(([name]) => name === initialRaga);
+        if (entry) setSelected(entry);
+    }, [initialRaga]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         const loadMastered = () => {
@@ -1251,7 +1263,6 @@ function RagaPractice({ sa }) {
         return () => window.removeEventListener('localStorage-mastered-ragas-updated', loadMastered);
     }, []);
 
-    const allRagas = Object.entries(RAGAS);
     const filtered = allRagas.filter(([name]) => name.toLowerCase().includes(search.toLowerCase()));
 
     if (selected) {

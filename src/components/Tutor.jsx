@@ -340,7 +340,7 @@ export default function Tutor({ saFrequency, appMode = 'musician', onSadhanaComp
                                 />
                             )
                         ) : tab === 'practice' ? (
-                            <RagaPractice sa={sa} />
+                            <RagaPractice sa={sa} initialRaga={launchTarget?.raga || null} />
                         ) : (
                             <TalaSwaraTranscriber sa={sa} setSa={updateSa} />
                         )}

@@ -735,6 +735,7 @@ function App() {
                     text: `${stale.raga} — ${d} day${d !== 1 ? 's' : ''} since last practice, still ${stale.masteryLevel}. Return before the scale shape fades.`,
                     cta: 'Practice in Gurukul',
                     action: 'tutor',
+                    ragaName: stale.raga,
                 };
             } else {
                 const ready = ragaStats.find(r => r.masteryLevel === 'stable' && r.identifiedCount >= 3);
@@ -744,6 +745,7 @@ function App() {
                         text: `${ready.raga} is stable with ${ready.totalSessions} sessions. Push it further with gamakam phrases.`,
                         cta: 'Open Gurukul',
                         action: 'tutor',
+                        ragaName: ready.raga,
                     };
                 }
             }
@@ -755,9 +757,9 @@ function App() {
             if (recommendation?.text?.includes(r.raga)) return;
             const d = daysAgo(r.lastPracticed);
             if ((r.masteryLevel === 'developing' || r.masteryLevel === 'exploring') && d !== null && d > 3) {
-                focusItems.push({ icon: '↩', text: `${r.raga} — ${d}d ago, still ${r.masteryLevel}`, action: 'tutor', urgency: d > 7 ? 'high' : 'medium' });
+                focusItems.push({ icon: '↩', text: `${r.raga} — ${d}d ago, still ${r.masteryLevel}`, action: 'tutor', ragaName: r.raga, urgency: d > 7 ? 'high' : 'medium' });
             } else if (r.masteryLevel === 'stable' && r.identifiedCount >= 3) {
-                focusItems.push({ icon: '↑', text: `${r.raga} — stable, ready for advanced phrases`, action: 'tutor', urgency: 'low' });
+                focusItems.push({ icon: '↑', text: `${r.raga} — stable, ready for advanced phrases`, action: 'tutor', ragaName: r.raga, urgency: 'low' });
             }
         });
 
@@ -1560,9 +1562,8 @@ function App() {
                                                         <button
                                                             onClick={() => {
                                                                 const r = workspaceBlocks.recommendation;
-                                                                r.action === 'compare'
-                                                                    ? goToCompare(r.ragaA, r.ragaB)
-                                                                    : goToAdvanced(r.action);
+                                                                if (r.action === 'compare') { goToCompare(r.ragaA, r.ragaB); return; }
+                                                                goToAdvanced('tutor', { tutorTarget: { tab: 'practice', raga: r.ragaName || null } });
                                                             }}
                                                             className="text-[10px] font-mono uppercase tracking-widest px-3.5 py-1.5 rounded-lg bg-c-gold text-c-bg font-bold hover:bg-c-gold-light transition-all"
                                                         >
@@ -1636,7 +1637,7 @@ function App() {
                                                         {workspaceBlocks.focusItems.map((item, i) => (
                                                             <button
                                                                 key={i}
-                                                                onClick={() => goToAdvanced(item.action)}
+                                                                onClick={() => goToAdvanced('tutor', { tutorTarget: { tab: 'practice', raga: item.ragaName || null } })}
                                                                 className="flex items-center gap-3 px-3 py-2 rounded-lg bg-white/[0.03] border border-white/6 hover:bg-white/[0.07] hover:border-white/12 transition-all text-left group"
                                                             >
                                                                 <span className={`text-sm leading-none flex-shrink-0 ${item.urgency === 'high' ? 'text-amber-500/70' : item.urgency === 'medium' ? 'text-c-gold/60' : 'text-emerald-500/60'}`}>{item.icon}</span>

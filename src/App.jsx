@@ -271,7 +271,11 @@ function parseHashRoute(hashValue = window.location.hash) {
 
     if (validModes.has(first)) {
         const view = segments[1] || 'home';
-        return { view, segments: [view, ...segments.slice(2)], mode: first, workspace: false };
+        const rest = segments.slice(2);
+        // compare view embeds raga names: #/musician/compare/RagaA/RagaB
+        const ragaA = view === 'compare' && rest[0] ? rest[0] : null;
+        const ragaB = view === 'compare' && rest[1] ? rest[1] : null;
+        return { view, segments: [view, ...rest], mode: first, workspace: false, ragaA, ragaB };
     }
 
     return { view: first, segments, mode: null, workspace: false };
@@ -299,6 +303,10 @@ function buildHashForView(view, tutorTarget = null, mode = null, options = {}) {
     // learner-model is mode-agnostic — omit mode from URL so reloading it never
     // silently switches the app from beginner to musician or vice versa.
     if (view === 'learner-model') return '#/learner-model';
+    if (view === 'compare' && options.ragaA && options.ragaB) {
+        const base = mode ? `#/${encodeURIComponent(mode)}/compare` : '#/compare';
+        return `${base}/${encodeURIComponent(options.ragaA)}/${encodeURIComponent(options.ragaB)}`;
+    }
     if (view !== 'tutor') {
         return mode
             ? `#/${encodeURIComponent(mode)}/${encodeURIComponent(view)}`
@@ -863,6 +871,9 @@ function App() {
             setShowWorkspaceSections(route.workspace);
         }
         setTutorLaunchTarget(targetView === 'tutor' ? parseTutorHashTarget(route.segments) : null);
+        if (targetView === 'compare' && route.ragaA && route.ragaB) {
+            setCompareRagas({ a: route.ragaA, b: route.ragaB });
+        }
     }, [appMode]);
 
     // Listen for hashchange events (back/forward navigation only — not goTo-triggered changes)
@@ -904,9 +915,9 @@ function App() {
     }, [isSignedIn, applyParsedRoute]);
 
     const goTo = (id, options = {}) => {
-        const { tutorTarget = null, modeOverride = null, workspace = false } = options;
+        const { tutorTarget = null, modeOverride = null, workspace = false, ragaA = null, ragaB = null } = options;
         if (!isSignedIn && (id !== 'home' || workspace || tutorTarget || modeOverride)) {
-            const pendingHash = buildHashForView(id, tutorTarget, modeOverride || appMode, { workspace });
+            const pendingHash = buildHashForView(id, tutorTarget, modeOverride || appMode, { workspace, ragaA, ragaB });
             try { localStorage.setItem(PENDING_ROUTE_KEY, pendingHash); } catch {}
             promptSignIn();
             setView('home');
@@ -938,7 +949,7 @@ function App() {
             setShowFeatures(true);
             setShowWorkspaceSections(false);
         }
-        const nextHash = buildHashForView(id, tutorTarget, id === 'home' ? effectiveMode : effectiveMode, { workspace });
+        const nextHash = buildHashForView(id, tutorTarget, effectiveMode, { workspace, ragaA, ragaB });
         if (window.location.hash !== nextHash) {
             window.location.hash = nextHash;
         }
@@ -949,7 +960,7 @@ function App() {
 
     const goToCompare = (a, b) => {
         setCompareRagas({ a, b });
-        goToAdvanced('compare');
+        goToAdvanced('compare', { ragaA: a, ragaB: b });
     };
     const enterWorkspace = (modeOverride = appMode) => goTo('home', { modeOverride, workspace: true });
 

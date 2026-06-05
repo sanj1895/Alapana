@@ -2888,7 +2888,7 @@ function App() {
                         ragaA={compareRagas.a}
                         ragaB={compareRagas.b}
                         onBack={() => goTo('home')}
-                        onPractice={() => goToAdvanced('tutor')}
+                        onPractice={() => goToAdvanced('tutor', { tutorTarget: { tab: 'practice', raga: compareRagas.a } })}
                     />
                 )}
                 {view === 'melakarta' && (

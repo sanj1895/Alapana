@@ -3086,7 +3086,7 @@ function App() {
 
             {!(view === 'home' && !showFeatures) && (
                 <footer className="py-6 text-center text-c-cream-dark text-xs font-playfair italic border-t border-c-border">
-                    Ālāpana · Carnatic Music
+                    Ālāpana · Solo Practice for Carnatic Learners
                 </footer>
             )}
         </div>

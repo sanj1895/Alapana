@@ -2971,7 +2971,7 @@ function App() {
                     </div>
                 )}
                 {view === 'learner-model' && (
-                    <LearnerModelPanel userId={userId} getToken={getToken} onNavigate={(dest) => {
+                    <LearnerModelPanel userId={userId} getToken={getToken} agentRec={agentRec} onNavigate={(dest) => {
                         if (dest && typeof dest === 'object') {
                             if (dest.view === 'compare') {
                                 goToCompare(dest.ragaA, dest.ragaB);

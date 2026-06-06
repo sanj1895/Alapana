@@ -71,7 +71,7 @@ async function parseError(res, fallback) {
   return fallback;
 }
 
-export default function LearnerModelPanel({ userId, getToken, onNavigate }) {
+export default function LearnerModelPanel({ userId, getToken, onNavigate, agentRec }) {
   const [data, setData]       = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState(null);
@@ -220,30 +220,61 @@ export default function LearnerModelPanel({ userId, getToken, onNavigate }) {
         ))}
       </div>
 
-      {/* ── Recommended Exercise (top prescription) ── */}
-      {recommendedExercise ? (
+      {/* ── Recommended Exercise — agent recommendation (primary) / local fallback ── */}
+      {(agentRec || recommendedExercise) ? (
         <section className="rounded-[18px] border border-c-gold/28 bg-c-card px-5 py-5 flex flex-col gap-3">
           <div>
-            <p className="text-[9px] uppercase tracking-[0.28em] text-c-gold/55 font-mono mb-1.5">{recommendedExercise.label}</p>
-            <p className="text-[0.9rem] font-playfair text-c-cream-dim leading-relaxed">{recommendedExercise.text}</p>
+            <p className="text-[9px] uppercase tracking-[0.28em] text-c-gold/55 font-mono mb-1.5">
+              {agentRec
+                ? ({ confusion_pair: 'Recurring confusion', stale_raga: 'Return to practice', advance_raga: 'Ready to advance', foundation: 'First session' }[agentRec.priority] || 'Recommended')
+                : recommendedExercise.label}
+            </p>
+            <p className="text-[0.9rem] font-playfair text-c-cream-dim leading-relaxed">
+              {agentRec ? agentRec.reason : recommendedExercise.text}
+            </p>
           </div>
           <div className="rounded-[12px] bg-c-gold/5 border border-c-gold/22 px-4 py-3">
             <p className="text-[9px] uppercase tracking-[0.2em] text-c-gold/50 font-mono mb-1">Exercise</p>
-            <p className="text-[13px] font-playfair text-c-cream-dim leading-relaxed">{recommendedExercise.exercise}</p>
+            <p className="text-[13px] font-playfair text-c-cream-dim leading-relaxed">
+              {agentRec ? agentRec.exercise : recommendedExercise.exercise}
+            </p>
           </div>
+          {agentRec?.sessionPlan?.length > 0 && (
+            <div className="flex flex-wrap items-center gap-1.5">
+              {agentRec.sessionPlan.map((step, i) => (
+                <span key={i} className="flex items-center gap-1.5">
+                  <span className="text-[10px] font-playfair text-c-cream-dark leading-snug">
+                    <span className="text-c-gold font-mono">{step.minutes}m</span> · {step.activity}
+                  </span>
+                  {i < agentRec.sessionPlan.length - 1 && <span className="text-c-cream-dark text-[10px]">→</span>}
+                </span>
+              ))}
+            </div>
+          )}
           <div className="flex flex-wrap items-center gap-2 pt-1">
             <button
-              onClick={() => nav(recommendedExercise.action)}
+              onClick={() => {
+                if (agentRec) {
+                  const d = agentRec.destination;
+                  if (d?.view === 'compare' && d.ragaA && d.ragaB) nav({ view: 'compare', ragaA: d.ragaA, ragaB: d.ragaB });
+                  else if (d?.view === 'tutor' && d.raga) nav({ view: 'tutor', tutorTarget: { tab: 'practice' }, raga: d.raga });
+                  else nav(d?.view || 'tutor');
+                } else {
+                  nav(recommendedExercise.action);
+                }
+              }}
               className="text-[11px] font-mono uppercase tracking-widest px-4 py-2 rounded-xl bg-c-gold text-c-bg font-bold hover:bg-c-gold-light transition-all"
             >
-              Open {recommendedExercise.tool} →
+              {agentRec
+                ? (agentRec.destination?.view === 'compare' ? 'Compare Ragas →' : agentRec.destination?.raga ? `Practice ${agentRec.destination.raga} →` : 'Start →')
+                : `Open ${recommendedExercise.tool} →`}
             </button>
-            <span className="text-[10px] font-mono text-c-cream-dark">{recommendedExercise.duration}</span>
+            {!agentRec && <span className="text-[10px] font-mono text-c-cream-dark">{recommendedExercise.duration}</span>}
           </div>
         </section>
       ) : !isEmpty && (
         <section className="rounded-[18px] border border-c-border bg-c-card px-5 py-4 flex items-center justify-between gap-4">
-          <p className="text-sm font-playfair text-c-cream-dim">No critical gap right now — keep building consistency.</p>
+          <p className="text-sm font-playfair text-c-cream-dim">You're building consistency. Keep going.</p>
           <button onClick={() => nav(consistencyAction.action)} className="flex-shrink-0 text-[10px] font-mono uppercase tracking-widest px-3 py-2 rounded-xl border border-c-gold/25 text-c-gold hover:bg-c-gold/8 transition-colors whitespace-nowrap">
             Open {consistencyAction.tool} →
           </button>

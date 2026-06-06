@@ -69,16 +69,16 @@ const FEATURES = [
 const APP_MODES = {
     beginner: {
         id: 'beginner',
-        label: 'Guided Basics',
-        shortLabel: 'Basics',
+        label: 'Guided Practice',
+        shortLabel: 'Guided',
         subtitle: 'A guided path with feedback, memory, and a daily next-step sequence.',
         primaryCta: 'Start My Practice Check',
     },
     musician: {
         id: 'musician',
-        label: 'Practice Workspace',
-        shortLabel: 'Workspace',
-        subtitle: 'A practice workspace with listening feedback, learner memory, and coaching for your specific gaps.',
+        label: 'Full Practice',
+        shortLabel: 'Practice',
+        subtitle: 'Listening feedback, persistent memory, and coaching for your specific patterns.',
         primaryCta: 'Continue My Practice Path',
     },
 };
@@ -2959,15 +2959,15 @@ function App() {
                 )}
                 {view === 'sadhana' && appMode !== 'beginner' && (
                     <div className="w-full max-w-xl mx-auto flex flex-col items-center gap-5 py-16 px-6 text-center animate-fade-in">
-                        <p className="font-playfair text-lg text-c-cream-dim italic">Sadhana is part of the Guided Basics path</p>
+                        <p className="font-playfair text-lg text-c-cream-dim italic">Sadhana is part of the Guided Practice path</p>
                         <p className="text-sm text-c-cream-dark max-w-sm leading-relaxed">
-                            Daily Sadhana is designed for learners building their foundation. Switch to Guided Basics to access your practice checklist and streak.
+                            Daily Sadhana is designed for learners building their foundation. Switch to Guided Practice to access your practice checklist and streak.
                         </p>
                         <button
                             onClick={() => goTo('home', { modeOverride: 'beginner' })}
                             className="px-6 py-2.5 bg-c-gold hover:bg-c-gold-light text-c-bg font-semibold text-sm rounded transition-all"
                         >
-                            Switch to Guided Basics
+                            Switch to Guided Practice
                         </button>
                     </div>
                 )}

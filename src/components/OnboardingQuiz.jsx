@@ -53,7 +53,7 @@ const U_QUESTIONS = [
             { label: 'Completely new',             sub: 'Just getting started with Carnatic music',          value: 'new',      guided: 3, workspace: 0 },
             { label: 'Know some basics',            sub: 'Familiar with a few terms or exercises',            value: 'basics',   guided: 2, workspace: 0 },
             { label: 'Already practice',            sub: 'I sing or study somewhat regularly',                value: 'practice', guided: 0, workspace: 2 },
-            { label: 'Serious student or performer',sub: 'Looking for tools for deeper work and analysis',    value: 'serious',  guided: 0, workspace: 3 },
+            { label: 'Serious student or performer',sub: 'Practicing seriously and looking for deeper feedback on specific gaps', value: 'serious',  guided: 0, workspace: 3 },
         ],
     },
     {
@@ -75,7 +75,7 @@ const U_QUESTIONS = [
             : 'What kind of experience sounds better right now?',
         options: [
             { label: 'Guide me step by step',      sub: 'One clear next step, no decisions needed',       value: 'guided',    guided: 4, workspace: 0 },
-            { label: 'Give me a practice workspace',sub: 'I practice regularly and want to choose my own session focus', value: 'workspace', guided: 0, workspace: 4 },
+            { label: 'Let me direct my own practice', sub: 'I practice regularly and want to choose my own session focus', value: 'workspace', guided: 0, workspace: 4 },
         ],
     },
 ];
@@ -397,7 +397,7 @@ export default function OnboardingQuiz({ active, onDismiss, onNavigate, onModeSe
     const pillBg    = isGuided ? 'rgba(247,214,134,0.10)' : 'rgba(180,210,247,0.08)';
     const pillBorder= isGuided ? 'rgba(247,214,134,0.20)' : 'rgba(180,210,247,0.18)';
     const pillText  = isGuided ? 'rgba(247,214,134,0.85)' : 'rgba(180,210,247,0.85)';
-    const pillLabel = isGuided ? 'Guided Path' : 'Practice Workspace';
+    const pillLabel = isGuided ? 'Guided Practice' : 'Self-directed Practice';
 
     return createPortal(
         <div

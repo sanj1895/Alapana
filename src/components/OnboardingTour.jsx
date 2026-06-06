@@ -21,7 +21,7 @@ const STEPS = [
     view: 'sadhana',
     feature: 'Daily Sadhana',
     title: 'Your daily practice routine',
-    body: "Sadhana ties all the features together into a 4-step daily ritual — drone warm-up, vocal curriculum, keyboard exploration, and ear training. Complete all 4 to build your streak.",
+    body: "Sadhana turns your daily practice into a structured 4-step sequence — drone warm-up, vocal curriculum, scale training, and ear practice. Complete all 4 to build your streak.",
     hint: 'Steps reset each morning — consistency is everything',
   },
   // ── PRACTICE ──
@@ -73,7 +73,7 @@ const STEPS = [
     feature: 'Raga Kosha',
     title: 'Understand the raga you are working on',
     body: "Priya checks Raga Kosha to study Kalyani and Dharmavati side by side — their scale differences and characteristic phrases. Supporting reference, not the center stage.",
-    hint: 'Use when you need to understand the raga you are practicing, not just explore',
+    hint: 'Use it alongside your practice — reference, not destination',
   },
   {
     view: 'melakarta',

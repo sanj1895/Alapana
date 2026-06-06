@@ -257,7 +257,7 @@ export default function CoachPanel({ userId, getToken, onNavigate, appMode, sadh
             <div>
               <div className="font-playfair text-sm" style={{ color: '#e8c96a' }}>Ālāpana Coach</div>
               <div className="text-[9px] uppercase tracking-[0.25em]" style={{ color: 'rgba(243,234,214,0.4)' }}>
-                Practice Guide · MongoDB Memory
+                Practice Coach · Learner Memory
               </div>
             </div>
             <div className="flex items-center gap-2">

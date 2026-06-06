@@ -141,14 +141,14 @@ export default function LearnerModelPanel({ userId, getToken, onNavigate, agentR
   if (stale) nextFocus.push({
     text:        `Return to ${stale.raga} — ${daysSince(stale.lastPracticed)} and still developing`,
     urgency:     'medium',
-    action:      { view: 'tutor', tutorTarget: { tab: 'practice' } },
-    actionLabel: 'Open Raga Practice',
+    action:      { view: 'tutor', tutorTarget: { tab: 'practice', raga: stale.raga } },
+    actionLabel: `Practice ${stale.raga}`,
   });
   if (ready) nextFocus.push({
     text:        `Advance ${ready.raga} — stable here, ready for more complex phrases`,
     urgency:     'low',
-    action:      { view: 'tutor', tutorTarget: { tab: 'practice' } },
-    actionLabel: 'Open Raga Practice',
+    action:      { view: 'tutor', tutorTarget: { tab: 'practice', raga: ready.raga } },
+    actionLabel: `Practice ${ready.raga}`,
   });
 
   // Single pre-computed prescription — mirrors buildPrescription in api/coach.js
@@ -387,7 +387,7 @@ export default function LearnerModelPanel({ userId, getToken, onNavigate, agentR
                         {r.raga} — {MASTERY_STYLES[r.masteryLevel]?.label} · {daysSince(r.lastPracticed)}
                       </p>
                       <button
-                        onClick={() => nav({ view: 'tutor', tutorTarget: { tab: 'practice' } })}
+                        onClick={() => nav({ view: 'tutor', tutorTarget: { tab: 'practice', raga: r.raga } })}
                         className="flex-shrink-0 text-[9px] font-mono uppercase tracking-widest px-2.5 py-1.5 rounded-lg border border-emerald-700/25 text-emerald-700/70 hover:bg-emerald-700/8 hover:text-emerald-700 transition-colors whitespace-nowrap"
                       >
                         Advance →
@@ -413,7 +413,7 @@ export default function LearnerModelPanel({ userId, getToken, onNavigate, agentR
                         {r.raga} — {daysSince(r.lastPracticed)}, still {MASTERY_STYLES[r.masteryLevel]?.label?.toLowerCase()}
                       </p>
                       <button
-                        onClick={() => nav({ view: 'tutor', tutorTarget: { tab: 'practice' } })}
+                        onClick={() => nav({ view: 'tutor', tutorTarget: { tab: 'practice', raga: r.raga } })}
                         className="flex-shrink-0 text-[9px] font-mono uppercase tracking-widest px-2.5 py-1.5 rounded-lg border border-c-gold/22 text-c-gold/70 hover:bg-c-gold/8 hover:text-c-gold transition-colors whitespace-nowrap"
                       >
                         Return →

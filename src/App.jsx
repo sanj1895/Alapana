@@ -413,6 +413,8 @@ function App() {
     const [sadhanaToast, setSadhanaToast] = useState(null); // { title, stepName }
     const [selectedRaga, setSelectedRaga] = useState(null); // { raga, hasClearMatch, type: 'library' | 'identify' | 'melakarta' }
     const [compareRagas, setCompareRagas] = useState(null); // { a, b }
+    const [agentRec, setAgentRec]         = useState(null); // agent JSON recommendation
+    const [agentRecLoading, setAgentRecLoading] = useState(false);
     const [showGuide, setShowGuide] = useState(false);
     const [practiceDemoBeat, setPracticeDemoBeat] = useState(0);
     const [practiceDemoSlider, setPracticeDemoSlider] = useState(4);
@@ -694,20 +696,27 @@ function App() {
         } catch {}
     }, [appMode]);
 
-    // Fetch learner model once when the workspace first expands so the guided
-    // blocks at the top of the workspace can show real session data.
+    // Fetch learner model + agent recommendation in parallel when workspace first expands.
     useEffect(() => {
         if (!isWorkspaceExpanded || !isSignedIn || !userId || workspaceModelFetched.current) return;
         workspaceModelFetched.current = true;
         setWorkspaceModelLoading(true);
+        setAgentRecLoading(true);
         const load = async () => {
             try {
                 const token = getToken ? await getToken() : null;
                 const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
-                const res = await fetch(`/api/learner-model?userId=${encodeURIComponent(userId)}`, { headers });
-                if (res.ok) setWorkspaceModel(await res.json());
-            } catch { /* non-fatal — workspace still renders without model data */ }
-            finally { setWorkspaceModelLoading(false); }
+                const uid = encodeURIComponent(userId);
+                const [modelRes, recRes] = await Promise.allSettled([
+                    fetch(`/api/learner-model?userId=${uid}`, { headers }),
+                    fetch(`/api/recommend?userId=${uid}`,     { headers }),
+                ]);
+                if (modelRes.status === 'fulfilled' && modelRes.value.ok)
+                    setWorkspaceModel(await modelRes.value.json());
+                if (recRes.status === 'fulfilled' && recRes.value.ok)
+                    setAgentRec(await recRes.value.json());
+            } catch { /* non-fatal */ }
+            finally { setWorkspaceModelLoading(false); setAgentRecLoading(false); }
         };
         load();
     }, [isWorkspaceExpanded, isSignedIn, userId, getToken]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -961,6 +970,17 @@ function App() {
     const goToCompare = (a, b) => {
         setCompareRagas({ a, b });
         goToAdvanced('compare', { ragaA: a, ragaB: b });
+    };
+
+    const routeAgentDest = (dest) => {
+        if (!dest) return;
+        if (dest.view === 'compare' && dest.ragaA && dest.ragaB) {
+            goToCompare(dest.ragaA, dest.ragaB);
+        } else if (dest.view === 'tutor' && dest.raga) {
+            goToAdvanced('tutor', { tutorTarget: { tab: 'practice', raga: dest.raga } });
+        } else {
+            goToAdvanced(dest.view || 'tutor');
+        }
     };
     const enterWorkspace = (modeOverride = appMode) => goTo('home', { modeOverride, workspace: true });
 
@@ -1557,38 +1577,51 @@ function App() {
                                         {/* ══ GUIDED PRACTICE BLOCKS ══ */}
                                         <div className="mt-4 sm:mt-5 flex flex-col gap-3 px-1.5 sm:px-2 md:px-3">
 
-                                            {/* Block 1 — Recommended next step */}
-                                            {workspaceModelLoading ? (
+                                            {/* Block 1 — Agent recommendation (primary) / static fallback */}
+                                            {(workspaceModelLoading || agentRecLoading) ? (
                                                 <div className="rounded-[20px] border border-c-gold/12 bg-[rgba(14,6,3,0.94)] px-5 py-5 animate-pulse">
                                                     <div className="h-2.5 w-36 rounded-full bg-c-gold/10 mb-3" />
                                                     <div className="h-4 w-4/5 rounded-full bg-c-gold/6 mb-2" />
                                                     <div className="h-4 w-3/5 rounded-full bg-c-gold/6 mb-4" />
                                                     <div className="h-8 w-40 rounded-xl bg-c-gold/8" />
                                                 </div>
-                                            ) : workspaceBlocks?.recommendation ? (
-                                                <div className="rounded-[16px] border border-c-gold/22 bg-[linear-gradient(140deg,rgba(199,139,34,0.07),rgba(7,3,2,0.98))] px-4 py-4">
-                                                    <p className="text-[8px] uppercase tracking-[0.28em] text-c-gold/50 font-mono mb-1.5">{workspaceBlocks.recommendation.label}</p>
-                                                    <p className="text-[0.85rem] font-playfair text-white/70 leading-relaxed mb-3">{workspaceBlocks.recommendation.text}</p>
+                                            ) : agentRec ? (
+                                                /* ── Agent-driven recommendation ── */
+                                                <div className="rounded-[16px] border border-c-gold/28 bg-[linear-gradient(140deg,rgba(199,139,34,0.09),rgba(7,3,2,0.98))] px-4 py-4">
+                                                    <p className="text-[8px] uppercase tracking-[0.28em] text-c-gold/55 font-mono mb-1.5">
+                                                        {{ confusion_pair: 'Recurring confusion', stale_raga: 'Return to practice', advance_raga: 'Ready to advance', foundation: 'First session' }[agentRec.priority] || 'Recommended'}
+                                                    </p>
+                                                    <p className="text-[0.88rem] font-playfair text-white/80 leading-relaxed mb-1.5">{agentRec.reason}</p>
+                                                    <p className="text-[0.82rem] font-playfair text-white/55 leading-relaxed mb-3">{agentRec.exercise}</p>
+                                                    {agentRec.sessionPlan?.length > 0 && (
+                                                        <div className="flex flex-wrap items-center gap-1.5 mb-3">
+                                                            {agentRec.sessionPlan.map((step, i) => (
+                                                                <span key={i} className="flex items-center gap-1.5">
+                                                                    <span className="text-[10px] font-playfair text-white/40 leading-snug">
+                                                                        <span className="text-c-gold/60 font-mono">{step.minutes}m</span> · {step.activity}
+                                                                    </span>
+                                                                    {i < agentRec.sessionPlan.length - 1 && (
+                                                                        <span className="text-white/20 text-[10px]">→</span>
+                                                                    )}
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                    )}
                                                     <div className="flex flex-wrap items-center gap-2">
                                                         <button
-                                                            onClick={() => {
-                                                                const r = workspaceBlocks.recommendation;
-                                                                if (r.action === 'compare') { goToCompare(r.ragaA, r.ragaB); return; }
-                                                                goToAdvanced('tutor', { tutorTarget: { tab: 'practice', raga: r.ragaName || null } });
-                                                            }}
+                                                            onClick={() => routeAgentDest(agentRec.destination)}
                                                             className="text-[10px] font-mono uppercase tracking-widest px-3.5 py-1.5 rounded-lg bg-c-gold text-c-bg font-bold hover:bg-c-gold-light transition-all"
                                                         >
-                                                            {workspaceBlocks.recommendation.cta} →
+                                                            {agentRec.destination?.view === 'compare' ? 'Compare Ragas →'
+                                                            : agentRec.destination?.view === 'shruthi' ? 'Open Shruthi →'
+                                                            : agentRec.destination?.raga ? `Practice ${agentRec.destination.raga} →`
+                                                            : 'Start Practice →'}
                                                         </button>
-                                                        <button
-                                                            onClick={() => goTo('learner-model')}
-                                                            className="text-[10px] font-mono uppercase tracking-widest px-3 py-1.5 rounded-lg border border-white/12 text-white/35 hover:border-white/20 hover:text-white/55 transition-colors"
-                                                        >
-                                                            Full memory →
-                                                        </button>
+                                                        <button onClick={() => goTo('learner-model')} className="text-[10px] font-mono uppercase tracking-widest px-3 py-1.5 rounded-lg border border-white/12 text-white/35 hover:border-white/20 hover:text-white/55 transition-colors">Full memory →</button>
                                                     </div>
                                                 </div>
                                             ) : workspaceModel ? (
+                                                /* ── Static reinforcement fallback ── */
                                                 <div className="rounded-[16px] border border-c-gold/22 bg-[linear-gradient(140deg,rgba(199,139,34,0.07),rgba(7,3,2,0.98))] px-4 py-4">
                                                     <p className="text-[8px] uppercase tracking-[0.28em] text-c-gold/50 font-mono mb-1.5">Reinforcement</p>
                                                     <p className="text-[0.85rem] font-playfair text-white/70 leading-relaxed mb-3">
@@ -1597,10 +1630,7 @@ function App() {
                                                             : "You're building consistency. Open Gurukul and continue your most recent raga — repetition at this stage is what moves it to muscle memory."}
                                                     </p>
                                                     <div className="flex flex-wrap items-center gap-2">
-                                                        <button
-                                                            onClick={() => goToAdvanced('tutor', { tutorTarget: { tab: 'practice', raga: workspaceModel.ragaStats?.[0]?.raga || null } })}
-                                                            className="text-[10px] font-mono uppercase tracking-widest px-3.5 py-1.5 rounded-lg bg-c-gold text-c-bg font-bold hover:bg-c-gold-light transition-all"
-                                                        >
+                                                        <button onClick={() => goToAdvanced('tutor', { tutorTarget: { tab: 'practice', raga: workspaceModel.ragaStats?.[0]?.raga || null } })} className="text-[10px] font-mono uppercase tracking-widest px-3.5 py-1.5 rounded-lg bg-c-gold text-c-bg font-bold hover:bg-c-gold-light transition-all">
                                                             {workspaceModel.ragaStats?.[0]?.raga ? `Practice ${workspaceModel.ragaStats[0].raga} →` : 'Open Gurukul →'}
                                                         </button>
                                                         <button onClick={() => goTo('learner-model')} className="text-[10px] font-mono uppercase tracking-widest px-3 py-1.5 rounded-lg border border-white/12 text-white/35 hover:border-white/20 hover:text-white/55 transition-colors whitespace-nowrap">Full memory →</button>

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { getSwaram } from '../../utils/ragaLogic';
-import { geminiChat as groqChatCompletion } from '../../utils/ragaIdentify';
+import { geminiChat } from '../../utils/ragaIdentify';
 import { CuratedIcon } from '../IconLibrary';
 import { deriveConfusedRaga, derivePracticeConfidence, derivePracticeOutcome, resolveKnownRagaName } from '../../utils/practiceAnalytics';
 import {
@@ -2957,8 +2957,8 @@ CRITICAL INSTRUCTIONS FOR GURU:
 6. Highlight 1 friendly little thing to practice with a playful, fun tip (e.g., "Try to hum like a little bee to make your voice super steady!" or "Imagine blowing out a tiny candle to support your breath!").
 7. Keep it very warm and under 120 words (2 short paragraphs maximum). Do NOT mention cents, numbers, or technical stability ratings.`;
 
-            const data = await groqChatCompletion({
-                model: 'llama-3.3-70b-versatile',
+            const data = await geminiChat({
+                model: 'gemini-2.5-flash',
                 messages: [{ role: 'user', content: PROMPT }],
                 temperature: 0.7
             });

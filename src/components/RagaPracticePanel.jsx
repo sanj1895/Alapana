@@ -12,7 +12,7 @@ import {
   getAudioCtx,
 } from '../utils/audioUtils';
 import { getSwaram, toSargam } from '../utils/ragaLogic';
-import { geminiChat as groqChatCompletion } from '../utils/ragaIdentify';
+import { geminiChat } from '../utils/ragaIdentify';
 import { deriveConfusedRaga, uniqueSwaras } from '../utils/practiceAnalytics';
 const RECORD_SECS = 20;
 
@@ -333,8 +333,8 @@ Respond in plain prose — exactly 3 short paragraphs, max 200 words total. Do N
 
 Tone: warm but direct. Address them as a serious student. Do not mention numbers or cents.`;
 
-      const data = await groqChatCompletion({
-        model: 'llama-3.3-70b-versatile',
+      const data = await geminiChat({
+        model: 'gemini-2.5-flash',
         messages: [{ role: 'user', content: PROMPT }],
         temperature: 0.65,
       });

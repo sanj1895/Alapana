@@ -1589,12 +1589,22 @@ function App() {
                                                     </div>
                                                 </div>
                                             ) : workspaceModel ? (
-                                                <div className="rounded-[16px] border border-white/6 bg-[rgba(10,4,2,0.92)] px-4 py-3 flex items-center justify-between gap-4">
-                                                    <div>
-                                                        <p className="text-[8px] uppercase tracking-[0.28em] text-c-gold/40 font-mono mb-1">Practice status</p>
-                                                        <p className="text-[0.82rem] font-playfair text-white/55">No critical gap right now — keep building consistency.</p>
+                                                <div className="rounded-[16px] border border-c-gold/22 bg-[linear-gradient(140deg,rgba(199,139,34,0.07),rgba(7,3,2,0.98))] px-4 py-4">
+                                                    <p className="text-[8px] uppercase tracking-[0.28em] text-c-gold/50 font-mono mb-1.5">Reinforcement</p>
+                                                    <p className="text-[0.85rem] font-playfair text-white/70 leading-relaxed mb-3">
+                                                        {workspaceModel.ragaStats?.[0]?.raga
+                                                            ? `You're building consistency. Run ${workspaceModel.ragaStats[0].raga} through arohanam and avarohanam today — repetition at this stage is what moves it to muscle memory.`
+                                                            : "You're building consistency. Open Gurukul and continue your most recent raga — repetition at this stage is what moves it to muscle memory."}
+                                                    </p>
+                                                    <div className="flex flex-wrap items-center gap-2">
+                                                        <button
+                                                            onClick={() => goToAdvanced('tutor', { tutorTarget: { tab: 'practice', raga: workspaceModel.ragaStats?.[0]?.raga || null } })}
+                                                            className="text-[10px] font-mono uppercase tracking-widest px-3.5 py-1.5 rounded-lg bg-c-gold text-c-bg font-bold hover:bg-c-gold-light transition-all"
+                                                        >
+                                                            {workspaceModel.ragaStats?.[0]?.raga ? `Practice ${workspaceModel.ragaStats[0].raga} →` : 'Open Gurukul →'}
+                                                        </button>
+                                                        <button onClick={() => goTo('learner-model')} className="text-[10px] font-mono uppercase tracking-widest px-3 py-1.5 rounded-lg border border-white/12 text-white/35 hover:border-white/20 hover:text-white/55 transition-colors whitespace-nowrap">Full memory →</button>
                                                     </div>
-                                                    <button onClick={() => goTo('learner-model')} className="flex-shrink-0 text-[9px] font-mono uppercase tracking-widest px-3 py-1.5 rounded-lg border border-white/10 text-white/30 hover:border-white/18 hover:text-white/50 transition-colors whitespace-nowrap">My memory →</button>
                                                 </div>
                                             ) : (
                                                 <div className="rounded-[16px] border border-white/6 bg-[rgba(10,4,2,0.92)] px-4 py-3 flex items-center justify-between gap-4">

@@ -94,11 +94,12 @@ export default async function handler(req, res) {
         { $limit: 8 },
       ]).toArray(),
 
-      // Practice timeline: last 21 days activity grouped by date
+      // Practice timeline: last 21 days — only evaluated sessions (raga present)
       db.collection('sessions').aggregate([
         {
           $match: {
             userId,
+            raga: { $exists: true, $nin: ['', null] },
             timestamp: { $gte: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000) },
           },
         },
@@ -113,7 +114,7 @@ export default async function handler(req, res) {
         { $sort: { _id: 1 } },
       ]).toArray(),
 
-      db.collection('sessions').countDocuments({ userId }),
+      db.collection('sessions').countDocuments({ userId, raga: { $exists: true, $nin: ['', null] } }),
     ]);
 
     const ragaStats = ragaStatsRaw.map(r => ({

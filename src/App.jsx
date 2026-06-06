@@ -892,7 +892,6 @@ function App() {
         return () => window.removeEventListener('hashchange', handleHashChange);
     }, [applyParsedRoute]);
 
-    const TRACKED_TOOLS = new Set(['avabodha', 'listen', 'viveka', 'transcribe', 'library', 'tutor', 'singback', 'keyboard', 'shruthi', 'talam']);
 
     const promptSignIn = useCallback(() => {
         setMobileMenuOpen(false);
@@ -945,10 +944,9 @@ function App() {
         if (id !== 'listen') handleReset();
         setTutorLaunchTarget(id === 'tutor' ? tutorTarget : null);
 
-        // Track meaningful tool navigation events
-        if (TRACKED_TOOLS.has(id) && id !== viewRef.current) {
-            window.__alapanaCoach?.saveSession({ tool: id });
-        }
+        // Navigation events are intentionally NOT written to MongoDB.
+        // Only evaluated practice sessions (from RagaPracticePanel, LessonRunner, etc.)
+        // belong in the learner memory — opening a tool is not a practice event.
 
         setView(id);
         if (id === 'home') {

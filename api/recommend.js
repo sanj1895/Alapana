@@ -112,7 +112,7 @@ function buildLearnerContext({ ragaStats, confusionPairs }) {
   const lines = [];
 
   if (confusionPairs.length > 0) {
-    lines.push('CONFUSION PAIRS (from evaluated Gurukul practice sessions):');
+    lines.push('CONFUSION PAIRS (from evaluated Gurukul practice, singback, and lesson-feedback sessions):');
     for (const c of confusionPairs) {
       lines.push(`  ${c.raga} ↔ ${c.confusedWith}: ${c.count} session${c.count !== 1 ? 's' : ''}, last ${c.daysSince !== null ? c.daysSince + 'd ago' : 'unknown'}`);
     }

@@ -167,14 +167,14 @@ export default function LearnerModelPanel({ userId, getToken, onNavigate, agentR
       label:    `${d} days without practice`,
       text:     `${stale.raga} is still ${stale.masteryLevel} and has not been practiced in ${d} day${d !== 1 ? 's' : ''}.`,
       exercise: `Sing Sarali Varisai pattern 1 in ${stale.raga} — one note per beat, five repetitions with the drone running.`,
-      tool:     'Raga Practice', action: { view: 'tutor', tutorTarget: { tab: 'practice' } }, duration: '15 min',
+      tool:     'Raga Practice', action: { view: 'tutor', tutorTarget: { tab: 'practice', raga: stale.raga } }, duration: '15 min',
     };
   } else if (ready) {
     recommendedExercise = {
       label:    'Ready to advance',
       text:     `${ready.raga} is stable with ${ready.totalSessions} sessions.`,
       exercise: `Practice a characteristic gamakam phrase in ${ready.raga} with AI vocal feedback. Focus on phrase endings and ornament clarity.`,
-      tool:     'Raga Practice', action: { view: 'tutor', tutorTarget: { tab: 'practice' } }, duration: '15 min',
+      tool:     'Raga Practice', action: { view: 'tutor', tutorTarget: { tab: 'practice', raga: ready.raga } }, duration: '15 min',
     };
   }
 

@@ -721,57 +721,16 @@ function App() {
         load();
     }, [isWorkspaceExpanded, isSignedIn, userId, getToken]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    // Derive the three guided workspace blocks from the learner model.
+    // Derive the two guided workspace blocks from the learner model.
     // Each block only renders when real data supports it — nothing is fabricated.
     const workspaceBlocks = workspaceModel ? (() => {
         const { confusionPairs = [], ragaStats = [] } = workspaceModel;
         const msDay = 86400000;
         const daysAgo = (d) => d ? Math.floor((Date.now() - new Date(d).getTime()) / msDay) : null;
 
-        // Recommendation: highest-priority single exercise
-        let recommendation = null;
-        if (confusionPairs[0]) {
-            const { raga, confusedWith, count } = confusionPairs[0];
-            recommendation = {
-                label: 'Top confusion pattern',
-                text: `You have confused ${raga} and ${confusedWith} ${count} time${count !== 1 ? 's' : ''}. See exactly which note differs and drill it.`,
-                cta: 'Compare Ragas',
-                action: 'compare',
-                ragaA: raga,
-                ragaB: confusedWith,
-            };
-        } else {
-            const stale = ragaStats.find(r =>
-                (r.masteryLevel === 'developing' || r.masteryLevel === 'exploring') &&
-                r.lastPracticed && Date.now() - new Date(r.lastPracticed).getTime() > 3 * msDay
-            );
-            if (stale) {
-                const d = daysAgo(stale.lastPracticed);
-                recommendation = {
-                    label: 'Return to neglected raga',
-                    text: `${stale.raga} — ${d} day${d !== 1 ? 's' : ''} since last practice, still ${stale.masteryLevel}. Return before the scale shape fades.`,
-                    cta: 'Practice in Gurukul',
-                    action: 'tutor',
-                    ragaName: stale.raga,
-                };
-            } else {
-                const ready = ragaStats.find(r => r.masteryLevel === 'stable' && r.identifiedCount >= 3);
-                if (ready) {
-                    recommendation = {
-                        label: 'Ready to advance',
-                        text: `${ready.raga} is stable with ${ready.totalSessions} sessions. Push it further with gamakam phrases.`,
-                        cta: 'Open Gurukul',
-                        action: 'tutor',
-                        ragaName: ready.raga,
-                    };
-                }
-            }
-        }
-
-        // Focus items: additional stale or ready ragas not already in the recommendation
+        // Focus items: stale or ready-to-advance ragas
         const focusItems = [];
         ragaStats.forEach(r => {
-            if (recommendation?.text?.includes(r.raga)) return;
             const d = daysAgo(r.lastPracticed);
             if ((r.masteryLevel === 'developing' || r.masteryLevel === 'exploring') && d !== null && d > 3) {
                 focusItems.push({ icon: '↩', text: `${r.raga} — ${d}d ago, still ${r.masteryLevel}`, action: 'tutor', ragaName: r.raga, urgency: d > 7 ? 'high' : 'medium' });
@@ -781,7 +740,6 @@ function App() {
         });
 
         return {
-            recommendation,
             confusionPairs: confusionPairs.slice(0, 3),
             focusItems: focusItems.slice(0, 3),
         };
@@ -1709,7 +1667,7 @@ function App() {
                                             </div>
                                         </div>
 
-                                        <section className="mt-4 sm:mt-6 px-1.5 sm:px-2 md:px-3" style={{ opacity: workspaceBlocks?.recommendation ? 0.72 : 1, transition: 'opacity 300ms ease' }}>
+                                        <section className="mt-4 sm:mt-6 px-1.5 sm:px-2 md:px-3" style={{ opacity: agentRec ? 0.72 : 1, transition: 'opacity 300ms ease' }}>
                                             <div className="rounded-[24px] sm:rounded-[34px] border border-c-gold/18 bg-[linear-gradient(180deg,rgba(14,6,3,0.96),rgba(7,3,2,0.98))] shadow-[0_30px_80px_rgba(0,0,0,0.42),0_0_0_1px_rgba(199,139,34,0.08)] overflow-hidden backdrop-blur-md">
                                                 <div className="relative z-10 px-4 pt-4 pb-3 sm:px-10">
                                                     <div className="flex items-center justify-center gap-4">
@@ -2073,7 +2031,7 @@ function App() {
                                             </div>
                                         </section>
 
-                                        <section className="mt-4 px-1.5 sm:px-2 md:px-3" style={{ opacity: workspaceBlocks?.recommendation ? 0.72 : 1, transition: 'opacity 300ms ease' }}>
+                                        <section className="mt-4 px-1.5 sm:px-2 md:px-3" style={{ opacity: agentRec ? 0.72 : 1, transition: 'opacity 300ms ease' }}>
                                             <div className="rounded-[24px] sm:rounded-[34px] border border-c-gold/18 bg-[linear-gradient(180deg,rgba(14,6,3,0.96),rgba(7,3,2,0.98))] shadow-[0_30px_80px_rgba(0,0,0,0.42),0_0_0_1px_rgba(199,139,34,0.08)] overflow-hidden backdrop-blur-md">
                                                 <div className="relative z-10 grid lg:grid-cols-[31%_69%] gap-0 px-3 py-3 sm:px-6 sm:py-6">
                                                     <div className="rounded-[20px] sm:rounded-[28px] bg-[linear-gradient(180deg,rgba(29,12,6,0.62),rgba(12,5,2,0.34))] px-4 py-4 sm:px-7 sm:py-6 backdrop-blur-sm">
@@ -2478,7 +2436,7 @@ function App() {
                                             </div>
                                         </section>
 
-                                        <section className="mt-4 px-1.5 sm:px-2 md:px-3" style={{ opacity: workspaceBlocks?.recommendation ? 0.72 : 1, transition: 'opacity 300ms ease' }}>
+                                        <section className="mt-4 px-1.5 sm:px-2 md:px-3" style={{ opacity: agentRec ? 0.72 : 1, transition: 'opacity 300ms ease' }}>
                                             <div className="rounded-[24px] sm:rounded-[34px] border border-c-gold/18 bg-[linear-gradient(180deg,rgba(14,6,3,0.96),rgba(7,3,2,0.98))] shadow-[0_30px_80px_rgba(0,0,0,0.42),0_0_0_1px_rgba(199,139,34,0.08)] overflow-hidden backdrop-blur-md">
                                                 <div className="grid lg:grid-cols-[31%_69%] gap-0 px-3 py-3 sm:px-6 sm:py-6">
                                                     <div className="rounded-[20px] sm:rounded-[28px] bg-[linear-gradient(180deg,rgba(29,12,6,0.62),rgba(12,5,2,0.34))] px-4 py-4 sm:px-7 sm:py-8">

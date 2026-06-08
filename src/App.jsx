@@ -289,6 +289,7 @@ function parseTutorHashTarget(segments = []) {
         const value = segments[i + 1];
         if (!value) break;
         if (key === 'tab') target.tab = value;
+        if (key === 'raga') target.raga = value;
         if (key === 'course') target.courseId = value;
         if (key === 'unit') target.unitId = value;
         if (key === 'lesson') target.lessonId = value;
@@ -316,6 +317,9 @@ function buildHashForView(view, tutorTarget = null, mode = null, options = {}) {
     const segments = mode ? [mode, 'tutor'] : ['tutor'];
     if (tutorTarget?.tab && tutorTarget.tab !== 'curriculum') {
         segments.push('tab', tutorTarget.tab);
+    }
+    if (tutorTarget?.raga) {
+        segments.push('raga', tutorTarget.raga);
     }
     if (tutorTarget?.courseId) {
         segments.push('course', tutorTarget.courseId);

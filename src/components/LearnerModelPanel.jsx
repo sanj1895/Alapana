@@ -257,7 +257,7 @@ export default function LearnerModelPanel({ userId, getToken, onNavigate, agentR
                 if (agentRec) {
                   const d = agentRec.destination;
                   if (d?.view === 'compare' && d.ragaA && d.ragaB) nav({ view: 'compare', ragaA: d.ragaA, ragaB: d.ragaB });
-                  else if (d?.view === 'tutor' && d.raga) nav({ view: 'tutor', tutorTarget: { tab: 'practice' }, raga: d.raga });
+                  else if (d?.view === 'tutor' && d.raga) nav({ view: 'tutor', tutorTarget: { tab: 'practice', raga: d.raga } });
                   else nav(d?.view || 'tutor');
                 } else {
                   nav(recommendedExercise.action);

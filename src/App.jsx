@@ -3082,7 +3082,7 @@ function App() {
                 })()}
             </div>
 
-            {!(view === 'home' && !showFeatures) && (
+            {!(view === 'home' && (!showFeatures || !isSignedIn)) && (
                 <footer className="py-6 text-center text-c-cream-dark text-xs font-playfair italic border-t border-c-border">
                     Ālāpana · Solo Practice for Carnatic Learners
                 </footer>

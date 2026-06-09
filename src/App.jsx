@@ -690,8 +690,6 @@ function App() {
         if (initialRoute.mode && initialRoute.mode !== appMode) {
             setAppMode(initialRoute.mode);
         }
-        // only needs to run once on mount for the parsed initial route
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -723,7 +721,7 @@ function App() {
             finally { setWorkspaceModelLoading(false); setAgentRecLoading(false); }
         };
         load();
-    }, [isWorkspaceExpanded, isSignedIn, userId, getToken]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [isWorkspaceExpanded, isSignedIn, userId, getToken]);
 
     // Derive the two guided workspace blocks from the learner model.
     // Each block only renders when real data supports it — nothing is fabricated.

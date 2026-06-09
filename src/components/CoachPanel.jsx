@@ -139,7 +139,7 @@ export default function CoachPanel({ userId, getToken, onNavigate, appMode, sadh
         .then(model => { if (model) setQuickPrompts(buildDynamicPrompts(model)); })
         .catch(() => {})
     );
-  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [open]);
 
   const sendMessage = useCallback(async (text) => {
     if (!text || loading) return;

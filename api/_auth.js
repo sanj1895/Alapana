@@ -1,4 +1,3 @@
-/* global process */
 import { verifyToken } from '@clerk/backend';
 
 /**

@@ -1,4 +1,3 @@
-/* global process, Buffer */
 import { MongoClient } from 'mongodb';
 import { GoogleAuth, UserRefreshClient } from 'google-auth-library';
 import { requireVerifiedUserId } from './_auth.js';

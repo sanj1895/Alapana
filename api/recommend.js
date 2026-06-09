@@ -1,4 +1,3 @@
-/* global process, Buffer */
 /**
  * Agent-driven practice recommendation.
  *

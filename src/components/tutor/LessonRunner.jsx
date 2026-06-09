@@ -12,6 +12,8 @@ import {
     getOctaveSequence,
     SEMITONES,
     swaraFreq,
+    centsDiff,
+    centsToNearest,
     getTokenSwara,
     getTokenDuration,
     getTokenNotationSuffix,
@@ -2822,13 +2824,10 @@ function SingAlongFeedback({ lesson, currentExercise, sa, onClose, onSadhanaComp
                                 // Add to chronological sequence (duplicates allowed with pauses)
                                 sequenceRef.current.push(swara);
                                 setDetectedNotes([...sequenceRef.current]);
-
-                                lastCommittedSwara = swara;
                             }
                         } else {
                             silenceCount++;
                             if (silenceCount >= 3) { // 150ms of unpitched/silence resets committed swara to recognize new Sa notes
-                                lastCommittedSwara = null;
                                 currentCandidate = null;
                                 candidateCount = 0;
                             }
@@ -2836,7 +2835,6 @@ function SingAlongFeedback({ lesson, currentExercise, sa, onClose, onSadhanaComp
                     } else {
                         silenceCount++;
                         if (silenceCount >= 3) {
-                            lastCommittedSwara = null;
                             currentCandidate = null;
                             candidateCount = 0;
                         }
@@ -2844,7 +2842,6 @@ function SingAlongFeedback({ lesson, currentExercise, sa, onClose, onSadhanaComp
                 } else {
                     silenceCount++;
                     if (silenceCount >= 3) {
-                        lastCommittedSwara = null;
                         currentCandidate = null;
                         candidateCount = 0;
                     }

@@ -435,6 +435,8 @@ export {
     GurukulIcon,
     SEMITONES,
     swaraFreq,
+    centsDiff,
+    centsToNearest,
     getTokenSwara,
     getTokenDuration,
     getTokenNotationSuffix,

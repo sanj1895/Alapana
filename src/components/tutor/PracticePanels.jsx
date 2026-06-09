@@ -1249,7 +1249,7 @@ function RagaPractice({ sa, initialRaga }) {
         if (!initialRaga) return;
         const entry = allRagas.find(([name]) => name === initialRaga);
         if (entry) setSelected(entry);
-    }, [initialRaga]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [initialRaga]);
 
     useEffect(() => {
         const loadMastered = () => {

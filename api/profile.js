@@ -1,4 +1,3 @@
-/* global process */
 import { MongoClient } from 'mongodb';
 import { requireVerifiedUserId } from './_auth.js';
 import { enforceRateLimit } from './_rateLimit.js';

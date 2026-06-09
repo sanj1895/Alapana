@@ -9,7 +9,6 @@
  * Uses Gemini 2.5 Flash via Vertex AI with responseMimeType=application/json
  * to guarantee structured output without a parsing wrapper.
  */
-/* global process */
 import { GoogleAuth, UserRefreshClient } from 'google-auth-library';
 //import { requireVerifiedUserId } from './_auth.js';
 import { enforceRateLimit } from './_rateLimit.js';

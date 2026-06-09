@@ -5,7 +5,7 @@ import AudioInput from './components/AudioInput';
 import RagaDisplay from './components/RagaDisplay';
 import RagaLibrary from './components/RagaLibrary';
 import MelakartaChart from './components/MelakartaChart';
-import GroqPanel from './components/GroqPanel';
+import GeminiPanel from './components/GeminiPanel';
 import SwaraKeyboard from './components/SwaraKeyboard';
 import GrahaBhedam from './components/GrahaBhedam';
 import SingBackChallenge from './components/SingBackChallenge';
@@ -2825,9 +2825,9 @@ function App() {
                                                 Standard
                                             </button>
                                             <button
-                                                onClick={() => setActiveMode('groq')}
+                                                onClick={() => setActiveMode('gemini')}
                                                 className={`px-6 py-2 rounded-full text-xs font-playfair tracking-wide transition-all ${
-                                                    activeMode === 'groq'
+                                                    activeMode === 'gemini'
                                                         ? 'bg-c-gold text-c-bg'
                                                         : 'text-c-cream-dim hover:text-c-cream'
                                                 }`}
@@ -2851,11 +2851,11 @@ function App() {
                                                 />
                                             </div>
                                         ) : (
-                                            <div className="flex flex-col w-full groq-ai-container">
+                                            <div className="flex flex-col w-full gemini-ai-container">
                                                 <p className="text-[11px] text-c-cream-dark text-center font-playfair italic mb-5 opacity-80 max-w-sm mx-auto">
                                                     Records a 30-second phrase, then sends the note sequence to the Ālaap AI model for deeper analysis — better at catching fluid ornaments and complex phrases.
                                                 </p>
-                                                <GroqPanel saFrequency={saFrequency} />
+                                                <GeminiPanel saFrequency={saFrequency} />
                                             </div>
                                         )}
                                     </div>

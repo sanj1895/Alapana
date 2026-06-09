@@ -171,7 +171,7 @@ function scoreCandidate(saHz, noteEvents) {
     return { saHz, unique, noteFreqs, candidates, tonicScore };
 }
 
-// Build the swara evidence string in the format identifyRagaWithGroq expects.
+// Build the swara evidence string in the format identifyRagaWithAI expects.
 function buildSwaraString(noteEvents, saHz) {
     const noteSeq = noteEvents.map(({ hz, durationMs }) => {
         const s = getSwaram(hz, saHz);
@@ -337,18 +337,18 @@ export default function Viveka({ onSelectRaga }) {
                             : 'closest';
         const ambiguousWith = resultType === 'ambiguous' ? second?.name : null;
 
-        let groqResult = null;
+        let geminiResult = null;
         // Only send to Gemini if local evidence is meaningful — avoids wasting tokens on noise.
         if (bestScore >= 2) {
             try {
-                groqResult = await identifyRagaWithAI(swaraString, best.candidates.slice(0, 5));
+                geminiResult = await identifyRagaWithAI(swaraString, best.candidates.slice(0, 5));
             } catch (_) {
                 // Network/API failure — fall back to local scoring only.
             }
         }
 
         const topOmission = top.omissionBonus > 0 ? `characteristic omissions detected` : '';
-        const topMatches = groqResult?.top_matches ?? best.candidates.slice(0, 3).map(c => ({
+        const topMatches = geminiResult?.top_matches ?? best.candidates.slice(0, 3).map(c => ({
             raagam:     c.name,
             confidence: localConfidence,
             reasoning:  [
@@ -377,7 +377,7 @@ export default function Viveka({ onSelectRaga }) {
             matches:      topMatches,
             saHz:         best.saHz,
             tonicAmbiguous,
-            localOnly:    !groqResult,
+            localOnly:    !geminiResult,
             resultType,
             ambiguousWith,
             localConfidence, // single source-of-truth confidence for the top match

@@ -1,9 +1,10 @@
 /**
  * Gemini-powered raga identification endpoint.
  *
- * Drop-in replacement for /api/groq — accepts the same OpenAI-compatible
- * request body and returns the same response shape so groqIdentify.js
- * needs no structural changes.
+ * Gemini-powered endpoint for raga identification.
+ *
+ * Accepts an OpenAI-compatible request body so the frontend transport stays
+ * simple and consistent.
  *
  * Uses Gemini 2.5 Flash via Vertex AI with responseMimeType=application/json
  * to guarantee structured output without a parsing wrapper.
@@ -64,7 +65,7 @@ if (!await enforceRateLimit(req, res, {
     return res.status(400).json({ error: 'Request too large.' });
   }
 
-  // Accept the same fields as /api/groq (model is ignored — we always use Gemini).
+  // Accept an OpenAI-compatible request shape; model is ignored.
   const { messages, temperature = 0.1 } = req.body || {};
   if (!Array.isArray(messages) || messages.length === 0) {
     return res.status(400).json({ error: 'Invalid messages.' });
@@ -110,7 +111,7 @@ if (!await enforceRateLimit(req, res, {
     const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!content) return res.status(500).json({ error: 'Empty response from Gemini.' });
 
-    // Return in OpenAI-compatible envelope so groqIdentify.js works unchanged.
+    // Return an OpenAI-compatible envelope for the frontend helper.
     return res.status(200).json({ choices: [{ message: { content } }] });
   } catch (err) {
     return res.status(500).json({ error: err.message || 'Gemini identify request failed.' });

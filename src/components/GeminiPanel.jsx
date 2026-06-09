@@ -9,7 +9,7 @@ const RECORD_SECS = 30;
 const MIN_SCORE   = 4.0;
 const STATES = { IDLE: 'idle', RECORDING: 'recording', PROCESSING: 'processing', RESULT: 'result', ERROR: 'error' };
 
-export default function GroqPanel({ saFrequency }) {
+export default function GeminiPanel({ saFrequency }) {
     const [panelState, setPanelState] = useState(STATES.IDLE);
     const [countdown, setCountdown]   = useState(RECORD_SECS);
     const [result, setResult]         = useState(null);
@@ -118,7 +118,7 @@ export default function GroqPanel({ saFrequency }) {
             });
             const unique = [...new Set(swaraList)];
 
-            // Local shortlist — must clear MIN_SCORE before we trust the evidence enough to call Groq.
+            // Local shortlist — must clear MIN_SCORE before we trust the evidence enough to call Gemini.
             const localCandidates = identifyRaga(unique, noteFreqs);
             if (!localCandidates.length || localCandidates[0].score < MIN_SCORE) {
                 throw new Error('The phrase didn\'t match any known raga confidently. Try singing a longer melodic phrase with more note variety.');

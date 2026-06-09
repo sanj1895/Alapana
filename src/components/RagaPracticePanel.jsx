@@ -218,7 +218,7 @@ export default function RagaPracticePanel({ raga, initialSaHz = 293.66, compactM
 
   const stopAndAnalyze = () => { cleanup(); doAnalyze(); };
 
-  // ── Analysis + Groq ──────────────────────────────────────────────────────
+  // ── Analysis + Gemini ───────────────────────────────────────────────────
 
   const doAnalyze = async () => {
     setPhase('processing');
@@ -307,7 +307,7 @@ export default function RagaPracticePanel({ raga, initialSaHz = 293.66, compactM
         ? `Oscillation detected on: ${gamakamNotes.join(', ')} — possible kampita gamakam`
         : 'No clear ornamentation detected';
 
-      // 6. Groq prompt
+      // 6. Gemini prompt
       const PROMPT = `You are an expert classical Carnatic vocal teacher evaluating a student who already has a foundation and is now deepening their practice of the raga ${raga.name}.
 
 RAGA: ${raga.name}

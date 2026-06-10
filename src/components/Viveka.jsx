@@ -901,7 +901,6 @@ export default function Viveka({ onSelectRaga }) {
                 {status === STATUS.RESULTS && results && (
                     <div className="w-full flex flex-col gap-4 animate-fade-in">
 
-                        {/* Shazam-style result header */}
                         <div className="w-full flex flex-col items-center gap-1 py-2">
                             <span className={`text-[9px] font-mono uppercase tracking-[0.2em] ${
                                 results.resultType === 'identified' ? 'text-emerald-400' :

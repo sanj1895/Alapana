@@ -44,7 +44,10 @@ Here's what happens when you sing into the app:
   Pitches are turned into swaras
      │
      ▼
-  Gemini 2.5 Flash identifies the raga and gives feedback
+  The swaras go to the AI gateway, a small Go service on Cloud Run
+     │
+     ▼
+  Gemini 3.8 Flash identifies the raga and gives feedback
      │
      ▼
   Your session is saved to MongoDB
@@ -53,20 +56,51 @@ Here's what happens when you sing into the app:
   Next time, the Coach reads your history and suggests what to practice
 ```
 
-Pitch detection happens entirely in your browser, so the app can react while you're still singing. The AI parts run on Google Cloud. The coach is an agent built with Google's Agent Development Kit (ADK), deployed on Vertex AI Agent Engine, and it reads and writes your practice history in MongoDB Atlas through a MongoDB MCP server.
+Pitch detection happens entirely in your browser, so the app can react while you're still singing. The AI parts run on Google Cloud.
 
-**Built with:** React, Vite, Tailwind, Web Audio API, Gemini 2.5 Flash, Vertex AI Agent Engine, Google ADK, MongoDB Atlas, Vercel
+The browser never sends the AI a prompt. It sends only the notes it heard and some numbers about your pitch. The [AI gateway](gateway/README.md) turns those into the prompt, checks that you're signed in, and limits how many requests each person can make. The limits live in Redis, so they hold across every running copy of the gateway.
+
+The coach is an agent built with Google's Agent Development Kit (ADK), deployed on Vertex AI Agent Engine, and it reads and writes your practice history in MongoDB Atlas through a MongoDB MCP server.
+
+**Built with:** React, Vite, Tailwind, Web Audio API, Go, Gemini 3.8 Flash, Vertex AI Agent Engine, Google ADK, MongoDB Atlas, Redis, Docker, Vercel, Cloud Run
 
 ## Run it yourself
 
-### What you need
+### The quick way: Docker
 
-- Node.js 18 or newer
+If you have Docker, one command runs the whole app on your computer: the website, the API, the AI gateway, a local MongoDB and Redis.
+
+First copy the example settings and add your Clerk keys to `.env`:
+
+```bash
+cp .env.example .env
+```
+
+Then sign in to Google Cloud, so the AI gateway can call Gemini, and start everything:
+
+```bash
+gcloud auth application-default login
+docker compose up --build
+```
+
+Open [http://localhost:5173](http://localhost:5173). To fill the local database with sample practice history, put your Clerk user ID in `.env` as `DEMO_USER_ID`, then run:
+
+```bash
+docker compose run --rm seed
+```
+
+### The manual way
+
+#### What you need
+
+- Node.js 22 or newer
 - Python 3.11 or newer
+- Go 1.26 or newer, for the AI gateway
 - A Google Cloud project with Vertex AI turned on
 - A MongoDB Atlas cluster (the free tier works)
+- A Clerk application, for sign-in
 
-### 1. Install everything
+#### 1. Install everything
 
 ```bash
 npm install
@@ -74,7 +108,7 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install google-adk mcp
 ```
 
-### 2. Add your keys
+#### 2. Add your keys
 
 ```bash
 cp .env.example .env
@@ -87,9 +121,11 @@ Open `.env` and fill in:
 | `MONGODB_URI` | Your Atlas connection string |
 | `GOOGLE_CLOUD_PROJECT` | Your Google Cloud project ID |
 | `GOOGLE_CREDENTIALS_B64` | Your service account key, base64 encoded |
+| `VITE_CLERK_PUBLISHABLE_KEY` | Your Clerk publishable key |
+| `CLERK_SECRET_KEY` | Your Clerk secret key |
 | `AGENT_ENGINE_RESOURCE` | Leave this blank for now. You'll get it in the next step. |
 
-### 3. Deploy the coach agent
+#### 3. Deploy the coach agent
 
 ```bash
 pip install "google-cloud-aiplatform[adk]>=1.87.0"
@@ -98,13 +134,23 @@ python agent/deploy_to_agent_engine.py
 
 When it finishes, it prints an `AGENT_ENGINE_RESOURCE` value. Copy that into your `.env`.
 
-### 4. Start the app
+#### 4. Start the app
+
+Run each of these in its own terminal: the website, the API routes, and the AI gateway.
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) and allow microphone access when your browser asks.
+```bash
+npm run dev:api
+```
+
+```bash
+cd gateway && go run .
+```
+
+Open [http://localhost:5173](http://localhost:5173) and allow microphone access when your browser asks. The website forwards API calls to the other two automatically.
 
 If you want to test the agent by itself, run `adk web agent` and open [http://localhost:8000](http://localhost:8000).
 
@@ -113,6 +159,8 @@ If you want to test the agent by itself, run `adk web agent` and open [http://lo
 ```
 agent/     The coach agent and the script that deploys it
 api/       Server routes the frontend calls
+gateway/   The Go AI gateway that builds prompts and calls Gemini
+server/    A local server that runs the api/ routes during development
 src/       The React app
 public/    Static files
 scripts/   Helper scripts

@@ -20,7 +20,7 @@ MongoDB Atlas  (sessions collection)
 
 Raga identification (Viveka feature):
 ```
-React App → /api/gemini-identify → Gemini 2.5 Flash (Vertex AI)
+React App → /api/ai/rank-ragas → Go AI gateway → Gemini 2.5 Flash (Vertex AI)
 ```
 
 ## Agent Engine Deployment
@@ -94,7 +94,7 @@ When a student sends a message to the coach:
 5. The agent recommends specific tools in the Ālāpana app (Gurukul, Raga Kosha, Viveka, etc.)
 6. After a session, the agent calls **MongoDB MCP `insertOne`** to save progress
 
-For raga identification (Viveka), `/api/gemini-identify` calls Gemini 2.5 Flash directly via Vertex AI with the transcribed swara evidence and local candidate shortlist.
+For raga identification (Viveka), the Go AI gateway (`gateway/`) builds the prompt from the transcribed swara events and the local candidate shortlist, then calls Gemini 2.5 Flash via Vertex AI.
 
 ## MongoDB Track — Partner Integration
 

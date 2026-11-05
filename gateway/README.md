@@ -5,7 +5,7 @@ the gateway builds every prompt itself, so a client cannot send the model
 arbitrary text.
 
 ```
-Browser ──POST /api/ai/{task}──► gateway (Cloud Run) ──► Gemini 2.5 Flash (Vertex AI)
+Browser ──POST /api/ai/{task}──► gateway (Cloud Run) ──► Gemini 3.8 Flash (Vertex AI, global)
           typed JSON + Clerk JWT     │
                                      └── Redis: per-user rate limits shared by all instances
 ```
@@ -64,7 +64,8 @@ Most people run it with the rest of the app: `docker compose up --build` from th
 | --- | --- | --- |
 | `CLERK_SECRET_KEY` | Yes | |
 | `GOOGLE_CLOUD_PROJECT` | Yes, unless the credentials name a project | |
-| `GOOGLE_CLOUD_LOCATION` | No | `us-central1` |
+| `GEMINI_MODEL` | No | `gemini-3.8-flash` |
+| `GEMINI_LOCATION` | No; current models only serve from `global` | `global` |
 | `GOOGLE_CREDENTIALS_B64` | No; otherwise Application Default Credentials | |
 | `REDIS_URL` | No; without it, limits are per instance | |
 | `ALLOWED_ORIGINS` | No; comma-separated, added to localhost:5173 and alapana.vercel.app | |

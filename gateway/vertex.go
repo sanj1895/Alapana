@@ -36,12 +36,20 @@ func newVertexClient(ctx context.Context, cfg config) (*vertexClient, error) {
 		return nil, errors.New("GOOGLE_CLOUD_PROJECT is required")
 	}
 	return &vertexClient{
-		http: oauth2.NewClient(ctx, creds.TokenSource),
-		endpoint: fmt.Sprintf(
-			"https://%s-aiplatform.googleapis.com/v1/projects/%s/locations/%s/publishers/google/models/%s:generateContent",
-			cfg.Location, project, cfg.Location, cfg.Model,
-		),
+		http:     oauth2.NewClient(ctx, creds.TokenSource),
+		endpoint: vertexEndpoint(project, cfg.Location, cfg.Model),
 	}, nil
+}
+
+// vertexEndpoint builds the generateContent URL. Regional locations use a
+// regional host; the global location uses the plain host.
+func vertexEndpoint(project, location, model string) string {
+	host := location + "-aiplatform.googleapis.com"
+	if location == "global" {
+		host = "aiplatform.googleapis.com"
+	}
+	return fmt.Sprintf("https://%s/v1/projects/%s/locations/%s/publishers/google/models/%s:generateContent",
+		host, project, location, model)
 }
 
 // googleCredentials prefers GOOGLE_CREDENTIALS_B64 (the gcloud user credentials

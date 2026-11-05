@@ -44,10 +44,13 @@ type config struct {
 
 func loadConfig() (config, error) {
 	cfg := config{
-		Port:           envOr("PORT", "8080"),
-		Project:        os.Getenv("GOOGLE_CLOUD_PROJECT"),
-		Location:       envOr("GOOGLE_CLOUD_LOCATION", "us-central1"),
-		Model:          envOr("GEMINI_MODEL", "gemini-2.5-flash"),
+		Port:    envOr("PORT", "8080"),
+		Project: os.Getenv("GOOGLE_CLOUD_PROJECT"),
+		// Current Gemini models are served from the global endpoint, not us-central1.
+		// The gateway has its own variable because the coach agent needs
+		// GOOGLE_CLOUD_LOCATION=us-central1 for Agent Engine.
+		Location:       envOr("GEMINI_LOCATION", "global"),
+		Model:          envOr("GEMINI_MODEL", "gemini-3.8-flash"),
 		CredentialsB64: os.Getenv("GOOGLE_CREDENTIALS_B64"),
 		ClerkSecretKey: os.Getenv("CLERK_SECRET_KEY"),
 		RedisURL:       os.Getenv("REDIS_URL"),

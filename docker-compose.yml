@@ -1,0 +1,93 @@
+# Local development stack: the whole app with one command.
+#
+#   docker compose up --build           app on http://localhost:5173
+#   docker compose run --rm seed        load demo practice history into local MongoDB
+#
+# Production is unchanged: Vercel serves the front end and api/, Cloud Run
+# serves the Go gateway. Secrets come from .env (see .env.example).
+
+name: alapana
+
+x-node: &node
+  build:
+    context: .
+    dockerfile: Dockerfile.dev
+  env_file:
+    - path: .env
+      required: false
+  volumes:
+    - .:/app
+    # Keep the image's Linux node_modules instead of the host's.
+    - /app/node_modules
+
+services:
+  web:
+    <<: *node
+    command: npm run dev -- --host 0.0.0.0
+    ports:
+      - "5173:5173"
+    environment:
+      API_PROXY_TARGET: http://api:3001
+      AI_GATEWAY_TARGET: http://gateway:8080
+    depends_on:
+      - api
+      - gateway
+
+  # api/*.js served by server/dev-server.js, reloading on change.
+  api:
+    <<: *node
+    command: node --watch server/dev-server.js
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      MONGODB_URI: ${LOCAL_MONGODB_URI:-mongodb://mongo:27017/alapana}
+      GOOGLE_CLOUD_PROJECT: ${GOOGLE_CLOUD_PROJECT:-project-24a53985-305d-4031-ae8}
+      GOOGLE_APPLICATION_CREDENTIALS: /gcloud/application_default_credentials.json
+    volumes:
+      - .:/app
+      - /app/node_modules
+      # Credentials from `gcloud auth application-default login` on the host.
+      - ${HOME}/.config/gcloud:/gcloud:ro
+    depends_on:
+      - mongo
+
+  gateway:
+    build: ./gateway
+    ports:
+      - "8080:8080"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      REDIS_URL: redis://redis:6379
+      GOOGLE_CLOUD_PROJECT: ${GOOGLE_CLOUD_PROJECT:-project-24a53985-305d-4031-ae8}
+      GOOGLE_APPLICATION_CREDENTIALS: /gcloud/application_default_credentials.json
+    volumes:
+      - ${HOME}/.config/gcloud:/gcloud:ro
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  # One-off: docker compose run --rm seed
+  # Set DEMO_USER_ID in .env to your Clerk user ID to see the data when signed in.
+  seed:
+    <<: *node
+    command: node scripts/seed-demo.js
+    profiles: ["tools"]
+    environment:
+      MONGODB_URI: ${LOCAL_MONGODB_URI:-mongodb://mongo:27017/alapana}
+    depends_on:
+      - mongo
+
+volumes:
+  mongo-data:

@@ -1,0 +1,14 @@
+# Never bake secrets into an image; Compose passes .env at runtime.
+.env
+.env.*
+!.env.example
+
+node_modules
+dist
+.git
+.vercel
+.venv
+.DS_Store
+agent/.adk
+agent/__pycache__
+gateway

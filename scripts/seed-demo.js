@@ -24,8 +24,9 @@ const MONGODB_URI = process.env.MONGODB_URI;
 if (!MONGODB_URI) { console.error('MONGODB_URI not set'); process.exit(1); }
 
 // ── Demo user ──────────────────────────────────────────────────────────────────
-// The main account that signed in and generated real sessions.
-const DEMO_USER_ID = 'user_3ESFT03NVT49JfEUZIq8S4tbW6h';
+// The main account that signed in and generated real sessions. Set DEMO_USER_ID
+// to seed a different Clerk user, such as your development-instance account.
+const DEMO_USER_ID = process.env.DEMO_USER_ID || 'user_3ESFT03NVT49JfEUZIq8S4tbW6h';
 
 // ── Helper ─────────────────────────────────────────────────────────────────────
 function daysAgo(n) {

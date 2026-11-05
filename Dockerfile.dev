@@ -1,0 +1,11 @@
+# Development image for the Vite front end and the Node API functions.
+# Docker Compose mounts the source over /app, so edits reload live.
+# Production deploys to Vercel and does not use this image.
+
+FROM node:22-alpine
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY . .
+EXPOSE 5173 3001
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

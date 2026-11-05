@@ -1,138 +1,78 @@
 /**
- * Raga identification via Gemini 2.5 Flash (Vertex AI).
+ * Client for the Go AI gateway (gateway/), which calls Gemini 2.5 Flash.
  *
- * All prompts and evidence-building logic is preserved from the original
- * implementation. Only the transport layer has changed: Gemini replaces
- * the previous LLM backend.
+ * The browser sends typed practice data only: swara events, pitch statistics,
+ * raga names. Every prompt is built on the server, so the client can never
+ * send the model arbitrary text. Requests carry the Clerk session token.
  */
-import { RAGAS } from './ragaLogic';
 
-export async function geminiChat(payload) {
-    const response = await fetch('/api/gemini-identify', {
+// App.jsx registers Clerk's getToken here, so helpers outside React can authenticate.
+let getAuthToken = null;
+
+export function setAuthTokenProvider(provider) {
+    getAuthToken = provider;
+}
+
+async function callAI(task, payload) {
+    const headers = { 'Content-Type': 'application/json' };
+    try {
+        const token = getAuthToken ? await getAuthToken() : null;
+        if (token) headers.Authorization = `Bearer ${token}`;
+    } catch { /* the gateway answers 401 below */ }
+
+    const response = await fetch(`/api/ai/${task}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify(payload),
     });
     if (!response.ok) {
         const err = await response.json().catch(() => ({}));
-        throw new Error(err.error?.message || err.error || `Gemini API error ${response.status}`);
+        if (response.status === 401) throw new Error('Please sign in again to use AI feedback.');
+        if (response.status === 429) {
+            throw new Error(err.scope === 'daily'
+                ? 'You have reached today’s AI usage limit. Please come back tomorrow.'
+                : 'You are sending requests too quickly. Please wait a moment and try again.');
+        }
+        throw new Error(err.error || `AI request failed (${response.status})`);
     }
     return response.json();
 }
 
-export async function identifyRagaWithAI(swaraString, localCandidates = []) {
-    const ragaList = Object.entries(RAGAS)
-        .map(([name, data]) => `${name} | Arohanam: ${data.arohanam.join(' ')} | Avarohanam: ${data.avarohanam.join(' ')}`)
-        .join('\n');
-
-    const localHint = localCandidates.length > 0
-        ? `\nLOCAL PATTERN ANALYSIS — pre-scored from deterministic note-set + phrase matching.\n` +
-          `Treat this as a strong prior. Your job is to RANK these candidates using the swara evidence, ` +
-          `not to generate a fresh list from scratch. Override only if the swara evidence clearly contradicts.\n` +
-          localCandidates.slice(0, 5).map((c, i) => {
-              const phraseNote = c.phraseMatches > 0 ? `, ${c.phraseMatches} signature phrase(s) matched` : '';
-              return `${i + 1}. ${c.name} — ${c.matchCount} scale notes matched, ${c.alienCount} alien${phraseNote}, local score ${c.score.toFixed(1)}`;
-          }).join('\n') + '\n'
-        : '';
-
-    const PROMPT = `You are an expert Carnatic classical musician and musicologist with deep knowledge of gamakam ornamentation.
-
-CRITICAL CONTEXT — GAMAKAM SINGING:
-This transcription is from a live vocal performance that may include Carnatic gamakams (pitch ornaments). When a singer performs gamakams, the voice slides through intermediate semitones — these appear as brief "transitional" notes between the true target swaras. These transitional pitches are NOT separate scale notes and must NOT be treated as alien notes.
-
-Example: A singer performing Ma2 with gamakam will slide through Ma1 on the way up. Ma1 will appear in the transcription even though the raga uses Ma2. Always trust the NOTE FREQUENCY SUMMARY over the raw sequence when they conflict.
-
-HOW TO IDENTIFY CORRECTLY:
-1. The NOTE FREQUENCY SUMMARY is your primary evidence. High-frequency notes that also appear as (long) are TRUE scale swaras. Low-frequency notes with no long occurrences are gamakam artifacts.
-2. Madhyama and Dhaivatam are branch-point decisions — identify them from the most frequent and longest notes FIRST.
-   — Ma1 (suddha madhyama) = semitone 5 | Ma2 (prati madhyama) = semitone 6
-   — Da1 (suddha dhaivatam) = semitone 8 | Da2 (chathusruti dhaivatam) = semitone 9
-3. Do NOT count a low-frequency note as an "alien note" if it sits one semitone away from a high-frequency note — it is almost certainly a slide artifact.
-4. Notes marked (long) or (very long) are established swaras. Plain notes may be passing tones.
-5. ASCENT / DESCENT ASYMMETRY: Many Carnatic janyas omit notes in ascent that appear in descent. A note appearing only rarely suggests it is avarohanam-only. Treat omissions in arohanam as POSITIVE evidence for the janya, not absence of information.
-6. PHRASE GRAMMAR over note inventory: Look for characteristic movement contours — the order and direction of notes matters more than whether all scale degrees appear. A janya whose movement pattern fits should beat a melakarta that merely contains all the detected notes.
-7. STRUCTURAL vs. ORNAMENTAL: Only frequently repeated notes and (long)/(very long) notes are structurally identity-bearing. Rare notes are ornamental or transitional.
-
-Transcribed swara sequence:
-${swaraString}
-${localHint}
-Reference Raga Dictionary:
-${ragaList}
-
-Using the reference dictionary as your strict baseline, identify the Top 3 most likely Carnatic raagams. Determine the correct madhyama from the prominent/long notes before comparing against the full scale.
-
-CRITICAL INSTRUCTIONS:
-- If the sequence matches a specific Janya raga's MOVEMENT PATTERN (arohanam/avarohanam shape, omitted notes, characteristic phrases), you MUST prefer that Janya over the parent Melakarta, even if the parent technically contains all the detected notes.
-- When two ragas are close, explicitly check: which Dhaivatam is dominant? Which Ni is dominant? Which Ma is used? These are branch points, not tie-breakers.
-- Absence of a note in arohanam (e.g., no Ri in the ascending phrase) is POSITIVE evidence for a janya that structurally omits that note.
-
-Respond ONLY with valid JSON exactly matching this format:
-{
-  "top_matches": [
-    {
-      "raagam": "<Name>",
-      "family": "<Parent melakarta name, or same as raagam if it IS the melakarta>",
-      "arohanam": "<ascending scale>",
-      "avarohanam": "<descending scale>",
-      "confidence": "<high, medium, or low>",
-      "prayogams": ["<phrase 1>", "<phrase 2>"],
-      "reasoning": "<Why this sequence matches this raagam, including ascent/descent analysis and key omissions>"
-    },
-    ... (provide exactly 3 matches)
-  ]
-}`;
-
-    const data = await geminiChat({
-        messages: [{ role: 'user', content: PROMPT }],
-        temperature: 0.1,
-    });
-    const text = data.choices[0]?.message?.content || '';
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error('Could not parse Gemini JSON response');
-    return JSON.parse(jsonMatch[0]);
+/**
+ * Rank the local scorer's shortlist against the sung notes.
+ * notes: [{ swara, durationMs, direction? }] where direction is 'up', 'down' or 'level'.
+ * localCandidates: identifyRaga() results; only the scoring fields are sent.
+ */
+export async function identifyRagaWithAI(notes, localCandidates = []) {
+    const candidates = localCandidates.slice(0, 5).map(c => ({
+        name: c.name,
+        matchCount: c.matchCount,
+        alienCount: c.alienCount,
+        phraseMatches: c.phraseMatches ?? 0,
+        score: c.score,
+    }));
+    const { result } = await callAI('rank-ragas', { notes, candidates });
+    return result;
 }
 
 export async function askAboutRaga(ragaName) {
-    const ragaRef = Object.entries(RAGAS)
-        .map(([name, data]) => `${name}: Arohanam=[${data.arohanam.join(', ')}] Avarohanam=[${data.avarohanam.join(', ')}] Parent=${data.type}`)
-        .join('\n');
-
-    const PROMPT = `You are an expert Carnatic classical musician and musicologist.
-The user is asking about: "${ragaName}".
-
-VERIFIED RAGA DATABASE (these scales are 100% correct — use them as ground truth):
-${ragaRef}
-
-INSTRUCTIONS:
-1. If "${ragaName}" exactly matches a raga in the database above, copy its arohanam and avarohanam VERBATIM. Do not alter a single note.
-2. If "${ragaName}" is clearly a janya or variant of a raga in the database (e.g. a graha bhedam, murchana, or alternate spelling), derive the scale mathematically from the parent. Explain the relationship in "description".
-3. If "${ragaName}" is NOT a real Carnatic raga at all, return only: { "error": "<explanation>" }
-4. NEVER invent compositions. Only include compositions you are certain about for THIS specific raga. If unsure, return an empty array.
-5. Use standard swara notation: Sa, Ri1, Ri2, Ri3, Ga1, Ga2, Ga3, Ma1, Ma2, Pa, Da1, Da2, Da3, Ni1, Ni2, Ni3.
-
-Respond ONLY with valid JSON:
-{
-  "name": "<correctly spelled raga name>",
-  "parent": "<parent melakarta name and number>",
-  "arohanam": ["Sa", ...],
-  "avarohanam": ["Sa", ...],
-  "mood": "<1-3 words>",
-  "description": "<2-3 sentences about character, history, and feeling — mention if this is a graha bhedam/variant>",
-  "compositions": ["<only compositions you are 100% certain belong to this raga>"]
-}`;
-
-    const data = await geminiChat({
-        messages: [{ role: 'user', content: PROMPT }],
-        temperature: 0.1,
-    });
-    const text = data.choices[0]?.message?.content || '';
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error('Could not parse Gemini JSON response');
-    const result = JSON.parse(jsonMatch[0]);
+    const { result } = await callAI('raga-lookup', { ragaName });
     return {
         ...result,
         type: `AI Search · ${result.parent}`,
         color: 'teal',
         video: null,
     };
+}
+
+// Raga Practice feedback from measured intonation, resonance, breath and gamakas.
+export async function getPracticeFeedback(measurements) {
+    const { text } = await callAI('practice-feedback', measurements);
+    return text;
+}
+
+// Gurukul lesson feedback comparing the sung swaras with the exercise.
+export async function getLessonFeedback(performance) {
+    const { text } = await callAI('lesson-feedback', performance);
+    return text;
 }

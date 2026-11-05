@@ -171,46 +171,20 @@ function scoreCandidate(saHz, noteEvents) {
     return { saHz, unique, noteFreqs, candidates, tonicScore };
 }
 
-// Build the swara evidence string in the format identifyRagaWithAI expects.
-function buildSwaraString(noteEvents, saHz) {
-    const noteSeq = noteEvents.map(({ hz, durationMs }) => {
-        const s = getSwaram(hz, saHz);
-        if (!s) return null;
-        if (durationMs > 1500) return `${s}(very long)`;
-        if (durationMs > 800)  return `${s}(long)`;
-        return s;
-    }).filter(Boolean).join(' ');
-
-    const counts = {};
-    const longCounts = {};
-    noteEvents.forEach(({ hz, durationMs }) => {
-        const s = getSwaram(hz, saHz);
-        if (!s) return;
-        counts[s] = (counts[s] || 0) + 1;
-        if (durationMs > 800) longCounts[s] = (longCounts[s] || 0) + 1;
-    });
-
-    const freqSummary = Object.entries(counts)
-        .sort((a, b) => b[1] - a[1])
-        .map(([n, c]) => `${n}×${c}${longCounts[n] ? `(${longCounts[n]} long)` : ''}`)
-        .join(', ');
-
-    // Approximate ascent/descent note distribution
-    const ascentCounts = {};
-    const descentCounts = {};
-    for (let i = 1; i < noteEvents.length; i++) {
-        const s = getSwaram(noteEvents[i].hz, saHz);
-        if (!s) continue;
-        if (noteEvents[i].hz > noteEvents[i - 1].hz * 1.03) {
-            ascentCounts[s] = (ascentCounts[s] || 0) + 1;
-        } else if (noteEvents[i].hz < noteEvents[i - 1].hz * 0.97) {
-            descentCounts[s] = (descentCounts[s] || 0) + 1;
-        }
-    }
-    const ascentStr  = Object.entries(ascentCounts).sort((a,b) => b[1]-a[1]).map(([n,c]) => `${n}×${c}`).join(', ');
-    const descentStr = Object.entries(descentCounts).sort((a,b) => b[1]-a[1]).map(([n,c]) => `${n}×${c}`).join(', ');
-
-    return `${noteSeq}\n\nNOTE FREQUENCY SUMMARY (most→least frequent): ${freqSummary}\nASCENT NOTES (approx): ${ascentStr || 'n/a'}\nDESCENT NOTES (approx): ${descentStr || 'n/a'}`;
+// Convert note events to the swara evidence identifyRagaWithAI sends. The AI
+// gateway turns these into the prompt text (gateway/evidence.go).
+// direction compares each note with the one before it (±3% counts as movement).
+function buildNoteEvidence(noteEvents, saHz) {
+    return noteEvents.map(({ hz, durationMs }, i) => {
+        const swara = getSwaram(hz, saHz);
+        if (!swara) return null;
+        const prevHz = noteEvents[i - 1]?.hz;
+        const direction = !prevHz ? ''
+            : hz > prevHz * 1.03 ? 'up'
+            : hz < prevHz * 0.97 ? 'down'
+            : 'level';
+        return { swara, durationMs, direction };
+    }).filter(Boolean);
 }
 
 export default function Viveka({ onSelectRaga }) {
@@ -303,7 +277,7 @@ export default function Viveka({ onSelectRaga }) {
         const best      = scored[0];
         const bestScore = best.candidates[0]?.score ?? -99; // raw raga score, not composite
 
-        const swaraString = buildSwaraString(noteEvents, best.saHz);
+        const noteEvidence = buildNoteEvidence(noteEvents, best.saHz);
 
         // Ambiguity check uses the composite score so that a tonic with better Sa/landing
         // behaviour beats one that is numerically close on raga score alone.
@@ -341,7 +315,7 @@ export default function Viveka({ onSelectRaga }) {
         // Only send to Gemini if local evidence is meaningful — avoids wasting tokens on noise.
         if (bestScore >= 2) {
             try {
-                geminiResult = await identifyRagaWithAI(swaraString, best.candidates.slice(0, 5));
+                geminiResult = await identifyRagaWithAI(noteEvidence, best.candidates.slice(0, 5));
             } catch (_) {
                 // Network/API failure — fall back to local scoring only.
             }

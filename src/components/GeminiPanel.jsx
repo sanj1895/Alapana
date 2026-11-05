@@ -109,12 +109,10 @@ export default function GeminiPanel({ saFrequency }) {
             // Duration-weighted note frequency map for identifyRaga.
             const noteFreqs = {};
             const swaraList = [];
-            const longNoteCounts = {};
             validNotes.forEach(x => {
                 const w = Math.max(1, Math.round((x.duration + 120) / 200));
                 for (let i = 0; i < w; i++) swaraList.push(x.note);
                 noteFreqs[x.note] = (noteFreqs[x.note] || 0) + w;
-                if (x.duration > 800) longNoteCounts[x.note] = (longNoteCounts[x.note] || 0) + 1;
             });
             const unique = [...new Set(swaraList)];
 
@@ -124,22 +122,9 @@ export default function GeminiPanel({ saFrequency }) {
                 throw new Error('The phrase didn\'t match any known raga confidently. Try singing a longer melodic phrase with more note variety.');
             }
 
-            const condensed = validNotes.map(x => {
-                if (x.duration > 1500) return `${x.note}(very long)`;
-                if (x.duration > 800) return `${x.note}(long)`;
-                return x.note;
-            }).join(' ');
-
-            // Simple event count for display summary (not weighted).
-            const noteCounts = {};
-            validNotes.forEach(x => { noteCounts[x.note] = (noteCounts[x.note] || 0) + 1; });
-            const freqSummary = Object.entries(noteCounts)
-                .sort((a, b) => b[1] - a[1])
-                .map(([note, count]) => `${note}×${count}${longNoteCounts[note] ? `(${longNoteCounts[note]} long)` : ''}`)
-                .join(', ');
-            const condensedWithSummary = `${condensed}\n\nNOTE FREQUENCY SUMMARY (most→least frequent): ${freqSummary}`;
-
-            const res = await identifyRagaWithAI(condensedWithSummary, localCandidates);
+            // The gateway builds the sequence and frequency summary from these events.
+            const notes = validNotes.map(x => ({ swara: x.note, durationMs: x.duration }));
+            const res = await identifyRagaWithAI(notes, localCandidates);
             setResult(res);
             setPanelState(STATES.RESULT);
         } catch (err) {

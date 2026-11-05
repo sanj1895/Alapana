@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { getSwaram } from '../../utils/ragaLogic';
-import { geminiChat } from '../../utils/ragaIdentify';
+import { getLessonFeedback } from '../../utils/ragaIdentify';
 import { CuratedIcon } from '../IconLibrary';
 import { deriveConfusedRaga, derivePracticeConfidence, derivePracticeOutcome, resolveKnownRagaName } from '../../utils/practiceAnalytics';
 import {
@@ -2885,81 +2885,24 @@ function SingAlongFeedback({ lesson, currentExercise, sa, onClose, onSadhanaComp
                 throw new Error("No distinct sustained notes detected. Please make sure you sing clearly into the microphone near the base drone!");
             }
 
+            // The AI gateway turns these numbers into tuning and stability words.
             const stats = Object.entries(notesGrouped).map(([note, devs]) => {
                 const avgDev = devs.reduce((s, v) => s + v, 0) / devs.length;
-                const roundedDev = Math.round(avgDev);
-                
-                // Calculate stability (standard deviation)
                 const variance = devs.reduce((s, v) => s + Math.pow(v - avgDev, 2), 0) / devs.length;
-                const stdDev = Math.sqrt(variance);
-                const stability = stdDev < 15 ? 'highly stable' : stdDev < 35 ? 'moderate stability' : 'wavering';
-
-                return {
-                    note,
-                    avgDev: roundedDev,
-                    stability,
-                    samplesCount: devs.length
-                };
+                return { note, avgDevCents: avgDev, stdDevCents: Math.sqrt(variance) };
             });
 
-            const statsString = stats.map(s => {
-                const sign = s.avgDev >= 0 ? '+' : '';
-                return `- Swara: ${s.note} | Cents Deviation: ${sign}${s.avgDev} cents (${Math.abs(s.avgDev) <= 15 ? 'in tune' : s.avgDev > 0 ? 'sharp' : 'flat'}) | Pitch Stability: ${s.stability}`;
-            }).join('\n');
-
-            const chronologicalDetectedSwaras = sequenceRef.current.join(' - ');
-
-            let feedbackText = '';
-            const PROMPT = styleToUse === 'classic'
-                ? `You are an expert classical Carnatic vocal coach (guru). 
-The student is practicing a lesson in their foundational curriculum.
-
-LESSON CONTEXT:
-- Lesson Title: "${lesson.title}"
-- Current Exercise: "${currentExercise.title || 'Sing Along'}"
-- Objective/Instruction: "${currentExercise.instruction || 'Sustain the pitches correctly'}"
-- Exercise Practice Type: ${practiceType}
-- Expected Target Swara Sequence to Sing: ${expectedString}
-- Student's Base Sa Frequency: ${sa} Hz
-
-STUDENT PERFORMANCE DATA DETECTED (8-second window):
-- Chronological Swaras Actually Sang: "${chronologicalDetectedSwaras || 'No distinct swaras detected'}"
-- Detailed Swara Statistics:
-${statsString}
-
-CRITICAL INSTRUCTIONS FOR GURU:
-1. Speak with the voice of a warm, wise, kind, and precise Carnatic guru. Greet the student briefly with a warm blessing (e.g., "Namaste, my dear student").
-2. Balance warmth and length. Keep the response moderately concise (between 120 and 180 words, 3 short paragraphs maximum). Avoid long boilerplate lists of generic advice, but do not be dry or overly brief.
-3. Compare what they actually sang with what they were expected to sing. Use classical terms naturally like "Shruti alignment", "Swarasthana accuracy", "Arohanam progression", "Avarohanam descent", or "Akaram resonance".
-4. Highlight 1 key vocal strength (e.g., breath control, stable Sa foundation, or natural resonance).
-5. Highlight 1 clear vocal correction needed (e.g., slight sharp or flat drifts, sequence order mismatch, or pitch stability waver).
-6. Give 1 highly actionable classical vocal tip (e.g., visual pitch onset mapping, abdominal breathing, or anchoring ears to the Tambura drone). Do NOT mention cents or numbers in your final feedback.`
-                : `You are an expert Carnatic vocal coach (guru) speaking to a child (12 years or younger) or an absolute beginner.
-The student is practicing a lesson in their foundational curriculum.
-
-LESSON CONTEXT:
-- Lesson Title: "${lesson.title}"
-- Current Exercise: "${currentExercise.title || 'Sing Along'}"
-- Expected Target Swara Sequence to Sing: ${expectedString}
-
-STUDENT PERFORMANCE DATA DETECTED (8-second window):
-- Chronological Swaras Actually Sang: "${chronologicalDetectedSwaras || 'No distinct swaras detected'}"
-
-CRITICAL INSTRUCTIONS FOR GURU:
-1. Speak with the voice of a very warm, loving, kind, and encouraging Carnatic guru, like a sweet, supportive grandparent or teacher.
-2. Greet the student lovingly with a warm blessing (e.g., "Namaste, my dear child!").
-3. Use extremely simple, friendly, and non-technical language. Do NOT use complex technical jargon like "Swarasthana accuracy", "Avarohanam descent", "cents deviation", or "Akaram resonance" without explaining them simply (e.g. call it "singing the notes on target" or "holding a steady voice").
-4. Compare what they actually sang with the target sequence in a very clear, supportive, and simple way.
-5. Highlight 1 simple thing they did great (e.g., "Your voice is so bright and sweet!" or "You hit that first Sa beautifully!").
-6. Highlight 1 friendly little thing to practice with a playful, fun tip (e.g., "Try to hum like a little bee to make your voice super steady!" or "Imagine blowing out a tiny candle to support your breath!").
-7. Keep it very warm and under 120 words (2 short paragraphs maximum). Do NOT mention cents, numbers, or technical stability ratings.`;
-
-            const data = await geminiChat({
-                model: 'gemini-2.5-flash',
-                messages: [{ role: 'user', content: PROMPT }],
-                temperature: 0.7
-            });
-            feedbackText = data.choices[0]?.message?.content || 'Unable to generate feedback at this time.';
+            // The gateway builds the guru prompt (classic or young) from this performance data.
+            let feedbackText = await getLessonFeedback({
+                style: styleToUse,
+                lessonTitle: lesson?.title || '',
+                exerciseTitle: currentExercise?.title || '',
+                instruction: currentExercise?.instruction || '',
+                expected: expectedSwaras.filter(Boolean),
+                detected: sequenceRef.current.slice(0, 512),
+                stats,
+                saHz: sa,
+            }) || 'Unable to generate feedback at this time.';
 
             const tryFormatGuruJson = (raw) => {
                 try {

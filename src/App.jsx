@@ -14,6 +14,7 @@ import Talam from './components/Talam';
 import Tutor from './components/Tutor';
 import Viveka from './components/Viveka';
 import { getSwaram, identifyRaga, RAGAS } from './utils/ragaLogic';
+import { setAuthTokenProvider } from './utils/ragaIdentify';
 import RagaDetail from './components/RagaDetail';
 import OnboardingTour from './components/OnboardingTour';
 import OnboardingQuiz from './components/OnboardingQuiz';
@@ -385,6 +386,9 @@ function App() {
     const { user, isSignedIn } = useUser();
     const { getToken } = useAuth();
     const { openSignIn } = useClerk();
+
+    // AI helpers outside React (raga identification, guru feedback) authenticate with this.
+    useEffect(() => { setAuthTokenProvider(getToken); }, [getToken]);
     const guestUserId = useRef(getGuestUserId());
     const userId = (isSignedIn && user?.id) ? user.id : guestUserId.current;
 

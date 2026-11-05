@@ -12,7 +12,7 @@ import {
   getAudioCtx,
 } from '../utils/audioUtils';
 import { getSwaram, toSargam } from '../utils/ragaLogic';
-import { geminiChat } from '../utils/ragaIdentify';
+import { getPracticeFeedback } from '../utils/ragaIdentify';
 import { deriveConfusedRaga, uniqueSwaras } from '../utils/practiceAnalytics';
 const RECORD_SECS = 20;
 
@@ -232,33 +232,17 @@ export default function RagaPracticePanel({ raga, initialSaHz = 293.66, compactM
         if (!noteGroups[swara]) noteGroups[swara] = [];
         noteGroups[swara].push(devCents);
       });
-      const intonation = Object.fromEntries(
-        Object.entries(noteGroups).map(([note, devs]) => {
-          const avg = devs.reduce((a, b) => a + b, 0) / devs.length;
-          const stdDev = Math.sqrt(devs.reduce((a, v) => a + Math.pow(v - avg, 2), 0) / devs.length);
-          return [note, {
-            avgDev: Math.round(avg),
-            stability: stdDev < 15 ? 'stable' : stdDev < 35 ? 'slightly wavering' : 'unstable',
-          }];
-        })
-      );
+      // The AI gateway turns these numbers into tuning and stability words.
+      const intonation = Object.entries(noteGroups).map(([note, devs]) => {
+        const avg = devs.reduce((a, b) => a + b, 0) / devs.length;
+        const stdDev = Math.sqrt(devs.reduce((a, v) => a + Math.pow(v - avg, 2), 0) / devs.length);
+        return { note, avgDevCents: avg, stdDevCents: stdDev };
+      });
 
       // 2. Sequence alignment
       const detected = sequenceRef.current;
-
-      const formatAlignment = (aligned) => aligned.map(({ note, hit }) => {
-        if (!hit) return `- ${note}: ✗ missed`;
-        const s = intonation[note];
-        if (!s) return `- ${note}: ✓ hit`;
-        const sign = s.avgDev >= 0 ? '+' : '';
-        const tuning = Math.abs(s.avgDev) <= 15 ? 'in tune' : s.avgDev > 0 ? 'sharp' : 'flat';
-        return `- ${note}: ✓ hit · ${sign}${s.avgDev}¢ (${tuning}) · ${s.stability}`;
-      }).join('\n');
-
       const aroAligned = alignSequence(detected, expectedAro);
       const avaAligned = alignSequence(detected, expectedAva);
-      const aroStr = formatAlignment(aroAligned);
-      const avaStr = formatAlignment(avaAligned);
       const allAligned = [...aroAligned, ...avaAligned];
       const totalTargets = allAligned.length || 1;
       const hitCount = allAligned.filter(item => item.hit).length;
@@ -273,72 +257,44 @@ export default function RagaPracticePanel({ raga, initialSaHz = 293.66, compactM
       // 3. Harmonic richness → resonance
       const harmArr = harmonicHist.current;
       const avgHarmonic = harmArr.length > 0 ? harmArr.reduce((a, b) => a + b, 0) / harmArr.length : 0;
-      const resonanceLabel = avgHarmonic > 0.55 ? 'resonant and open'
-        : avgHarmonic > 0.35 ? 'moderately resonant'
-        : 'thin or constricted — voice may be tight';
 
       // 4. Breath support (RMS envelope shape)
       const rmsArr = rmsHist.current;
-      let breathLabel = 'steady';
+      let breath = 'unknown';
       if (rmsArr.length > 20) {
         const cut = Math.floor(rmsArr.length * 0.75);
         const earlyAvg = rmsArr.slice(0, cut).reduce((a, b) => a + b, 0) / cut;
         const lateAvg  = rmsArr.slice(cut).reduce((a, b) => a + b, 0) / (rmsArr.length - cut);
         const variance  = rmsArr.reduce((a, v) => a + Math.pow(v - earlyAvg, 2), 0) / rmsArr.length;
-        if (lateAvg < earlyAvg * 0.5)  breathLabel = 'fading — voice dropped toward the end, likely breath support issue';
-        else if (variance > 0.0008)     breathLabel = 'slightly inconsistent — some volume fluctuation detected';
-        else                            breathLabel = 'steady and well-supported throughout';
+        if (lateAvg < earlyAvg * 0.5)  breath = 'fading';
+        else if (variance > 0.0008)     breath = 'inconsistent';
+        else                            breath = 'steady';
       }
 
       // 5. Gamakam / oscillation per note segment
-      const gamakamNotes = [];
+      const ornaments = [];
       let segStart = 0;
       for (let i = 1; i <= samples.length; i++) {
         const ended = i === samples.length || samples[i]?.swara !== samples[segStart].swara;
         if (ended) {
           if (i - segStart >= 8) {
             const hz = oscillationHz(samples.slice(segStart, i).map(s => s.freq));
-            if (hz >= 3.5 && hz <= 9) gamakamNotes.push(`${samples[segStart].swara} (${hz.toFixed(1)} Hz)`);
+            if (hz >= 3.5 && hz <= 9) ornaments.push({ note: samples[segStart].swara, hz });
           }
           segStart = i;
         }
       }
-      const ornamentLabel = gamakamNotes.length > 0
-        ? `Oscillation detected on: ${gamakamNotes.join(', ')} — possible kampita gamakam`
-        : 'No clear ornamentation detected';
 
-      // 6. Gemini prompt
-      const PROMPT = `You are an expert classical Carnatic vocal teacher evaluating a student who already has a foundation and is now deepening their practice of the raga ${raga.name}.
-
-RAGA: ${raga.name}
-Arohanam: ${expectedAro.join(' ')}
-Avarohanam: ${expectedAva.join(' ')}
-${raga.description ? `Character: ${raga.description}` : ''}
-
-AROHANAM ACCURACY:
-${aroStr}
-
-AVAROHANAM ACCURACY:
-${avaStr}
-
-VOICE QUALITY:
-- Resonance: ${resonanceLabel} (harmonic richness: ${(avgHarmonic * 100).toFixed(0)}%)
-- Breath Support: ${breathLabel}
-- Ornamentation: ${ornamentLabel}
-
-Respond in plain prose — exactly 3 short paragraphs, max 200 words total. Do NOT use JSON, bullet points, or headers.
-1. Note accuracy — which notes they nailed, which were consistently flat or sharp, which they missed. Be specific.
-2. Voice quality — address the resonance and breath support using proper Carnatic terms (akaram, gamakam, shruti, swarasthana). If ornamentation was detected, comment on whether it was clean.
-3. One precise, actionable tip for their next practice session.
-
-Tone: warm but direct. Address them as a serious student. Do not mention numbers or cents.`;
-
-      const data = await geminiChat({
-        model: 'gemini-2.5-flash',
-        messages: [{ role: 'user', content: PROMPT }],
-        temperature: 0.65,
-      });
-      const raw = data.choices[0]?.message?.content || 'No feedback generated.';
+      // 6. AI Guru feedback: the gateway builds the prompt from these measurements.
+      const raw = await getPracticeFeedback({
+        raga: { name: raga.name, arohanam: expectedAro, avarohanam: expectedAva },
+        arohanamResult: aroAligned,
+        avarohanamResult: avaAligned,
+        intonation,
+        harmonicRichness: Math.min(1, Math.max(0, avgHarmonic)),
+        breath,
+        ornaments,
+      }) || 'No feedback generated.';
       // Model sometimes returns JSON despite prose instruction — convert common
       // structured shapes back into readable guru prose.
       let parsed = raw;

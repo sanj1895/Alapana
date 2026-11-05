@@ -2688,10 +2688,11 @@ function SingAlongFeedback({ lesson, currentExercise, sa, onClose, onSadhanaComp
     let practiceType = 'Sustained Pitch';
     const instr = (currentExercise?.instruction || '').toLowerCase();
     const titleLower = (currentExercise?.title || lesson?.title || '').toLowerCase();
-    if (titleLower.includes('arohanam') || titleLower.includes('ascending') || instr.includes('arohanam') || instr.includes('ascending')) {
-        practiceType = 'Arohanam (Ascending Practice)';
-    } else if (titleLower.includes('avarohanam') || titleLower.includes('descending') || instr.includes('avarohanam') || instr.includes('descending')) {
+    // Avarohanam first: "avarohanam" contains "arohanam".
+    if (titleLower.includes('avarohanam') || titleLower.includes('descending') || instr.includes('avarohanam') || instr.includes('descending')) {
         practiceType = 'Avarohanam (Descending Practice)';
+    } else if (titleLower.includes('arohanam') || titleLower.includes('ascending') || instr.includes('arohanam') || instr.includes('ascending')) {
+        practiceType = 'Arohanam (Ascending Practice)';
     } else if (expectedSwaras.length > 1) {
         practiceType = 'Melodic Sequence';
     } else if (expectedSwaras.length === 1) {

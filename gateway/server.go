@@ -41,7 +41,8 @@ type server struct {
 
 func (s *server) routes() http.Handler {
 	mux := http.NewServeMux()
-	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, _ *http.Request) {
+	// Not /healthz: Cloud Run reserves paths ending in "z".
+	mux.HandleFunc("GET /health", func(w http.ResponseWriter, _ *http.Request) {
 		writeJSON(w, http.StatusOK, map[string]bool{"ok": true})
 	})
 	mux.HandleFunc("OPTIONS /api/ai/{task}", func(w http.ResponseWriter, _ *http.Request) {

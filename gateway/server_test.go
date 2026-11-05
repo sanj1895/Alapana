@@ -160,7 +160,7 @@ func TestRateLimitResponse(t *testing.T) {
 
 func TestHealthz(t *testing.T) {
 	rec := httptest.NewRecorder()
-	newTestServer(t, &fakeLLM{}).ServeHTTP(rec, httptest.NewRequest(http.MethodGet, "/healthz", nil))
+	newTestServer(t, &fakeLLM{}).ServeHTTP(rec, httptest.NewRequest(http.MethodGet, "/health", nil))
 	if rec.Code != http.StatusOK {
 		t.Fatalf("status %d", rec.Code)
 	}

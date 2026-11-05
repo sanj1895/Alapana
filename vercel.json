@@ -2,5 +2,11 @@
   "functions": {
     "api/coach.js":    { "maxDuration": 60 },
     "api/sessions.js": { "maxDuration": 60 }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/api/ai/:path*",
+      "destination": "https://alapana-gateway-948714598325.us-central1.run.app/api/ai/:path*"
+    }
+  ]
 }

@@ -1,0 +1,2234 @@
+[
+  {
+    "name": "Kanakangi",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga1",
+      "Ma1",
+      "Pa",
+      "Da1",
+      "Ni1",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni1",
+      "Da1",
+      "Pa",
+      "Ma1",
+      "Ga1",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 1",
+    "description": "The first raga of the entire system  ·  sparse, primordial, rarely performed. Its two consecutive lower notes give it a stark, almost primeval quality."
+  },
+  {
+    "name": "Ratnangi",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga1",
+      "Ma1",
+      "Pa",
+      "Da1",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da1",
+      "Pa",
+      "Ma1",
+      "Ga1",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 2",
+    "description": "Subtle and inward-looking. The flat lower register and muted upper notes create a contemplative, almost wordless quality."
+  },
+  {
+    "name": "Ganamurti",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga1",
+      "Ma1",
+      "Pa",
+      "Da1",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da1",
+      "Pa",
+      "Ma1",
+      "Ga1",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 3",
+    "description": "Named for Ganapati (Gana + murti), suggesting auspicious beginnings. The bright Ni3 over the flat lower register creates a striking contrast."
+  },
+  {
+    "name": "Vanaspati",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga1",
+      "Ma1",
+      "Pa",
+      "Da2",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da2",
+      "Pa",
+      "Ma1",
+      "Ga1",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 4",
+    "description": "Evokes the quiet of a forest  ·  flat lower notes, gentle upper register. Rarely heard, but carries a sense of deep natural stillness."
+  },
+  {
+    "name": "Manavati",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga1",
+      "Ma1",
+      "Pa",
+      "Da2",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da2",
+      "Pa",
+      "Ma1",
+      "Ga1",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 5",
+    "description": "A raga of quiet dignity. The flat Ri against the bright upper notes gives it a solemn, unhurried feeling."
+  },
+  {
+    "name": "Tanarupi",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga1",
+      "Ma1",
+      "Pa",
+      "Da3",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da3",
+      "Pa",
+      "Ma1",
+      "Ga1",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 6",
+    "description": "One of the most structurally unusual Melakartas  ·  it skips Da entirely, leaping from Pa straight to Ni2. The consecutive Ni2-Ni3 in the upper register creates a tense, contemplative quality."
+  },
+  {
+    "name": "Senavati",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga2",
+      "Ma1",
+      "Pa",
+      "Da1",
+      "Ni1",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni1",
+      "Da1",
+      "Pa",
+      "Ma1",
+      "Ga2",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 7",
+    "description": "The flat Ri and Ga2 lower tetrachord, combined with flat Da, gives this raga a grounded, unhurried devotional quality."
+  },
+  {
+    "name": "Hanumatodi",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga2",
+      "Ma1",
+      "Pa",
+      "Da1",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da1",
+      "Pa",
+      "Ma1",
+      "Ga2",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 8",
+    "description": "The parent of Todi  ·  one of the most beloved ragas in all of Carnatic music. Its deeply flat lower register holds you gently in longing. Morning performances are legendary."
+  },
+  {
+    "name": "Dhenuka",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga2",
+      "Ma1",
+      "Pa",
+      "Da1",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da1",
+      "Pa",
+      "Ma1",
+      "Ga2",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 9",
+    "description": "The sharp Ni3 over the deeply flat lower register creates an unexpected brightness  ·  like sunlight breaking through an overcast morning."
+  },
+  {
+    "name": "Natakapriya",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga2",
+      "Ma1",
+      "Pa",
+      "Da2",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da2",
+      "Pa",
+      "Ma1",
+      "Ga2",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 10",
+    "description": "Dramatic contrast between flat lower and middle register. Said to be suited for theatrical expression."
+  },
+  {
+    "name": "Kokilapriya",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga2",
+      "Ma1",
+      "Pa",
+      "Da2",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da2",
+      "Pa",
+      "Ma1",
+      "Ga2",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 11",
+    "description": "Named for the koel (kokila). The flat lower register with a bright Da2-Ni3 upper tetrachord creates something lovely and surprising."
+  },
+  {
+    "name": "Rupavati",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga2",
+      "Ma1",
+      "Pa",
+      "Da3",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da3",
+      "Pa",
+      "Ma1",
+      "Ga2",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 12",
+    "description": "Two consecutive upper semitones against the flat lower tetrachord. An unusual structural symmetry that gives it a reflective, aesthetic quality."
+  },
+  {
+    "name": "Gayakapriya",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga3",
+      "Ma1",
+      "Pa",
+      "Da1",
+      "Ni1",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni1",
+      "Da1",
+      "Pa",
+      "Ma1",
+      "Ga3",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 13",
+    "description": "The combination of flat Ri with natural Ga3 is a signature sound  ·  warm and earnest. The flat Da cluster gives a tender quality."
+  },
+  {
+    "name": "Vakulabharanam",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga3",
+      "Ma1",
+      "Pa",
+      "Da1",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da1",
+      "Pa",
+      "Ma1",
+      "Ga3",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 14",
+    "description": "A raga of tender devotion  ·  flat Ri and Da against natural Ga. Rarely explored fully but carries a distinctive sweetness."
+  },
+  {
+    "name": "Mayamalavagowla",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga3",
+      "Ma1",
+      "Pa",
+      "Da1",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da1",
+      "Pa",
+      "Ma1",
+      "Ga3",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 15",
+    "description": "The raga of morning prayers  ·  ancient, majestic, complete. Every music student's first Melakarta. The symmetry of Ri1/Da1 with Ga3/Ni3 gives it an eternal, timeless feeling."
+  },
+  {
+    "name": "Chakravakam",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga3",
+      "Ma1",
+      "Pa",
+      "Da2",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da2",
+      "Pa",
+      "Ma1",
+      "Ga3",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 16",
+    "description": "Parent of the beloved janya Chakravakam  ·  gentle and warm. The natural Ga with moderate upper notes creates a calm, even temperament."
+  },
+  {
+    "name": "Suryakantam",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga3",
+      "Ma1",
+      "Pa",
+      "Da2",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da2",
+      "Pa",
+      "Ma1",
+      "Ga3",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 17",
+    "description": "Named for the sun  ·  the flat Ri against a bright upper tetrachord gives a luminous quality, like sunlight on still water."
+  },
+  {
+    "name": "Hatakambari",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga3",
+      "Ma1",
+      "Pa",
+      "Da3",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da3",
+      "Pa",
+      "Ma1",
+      "Ga3",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 18",
+    "description": "The consecutive Ni2-Ni3 in the upper register creates an unusual intensity. The combination with natural Ga is striking and memorable."
+  },
+  {
+    "name": "Jhankaradhwani",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga2",
+      "Ma1",
+      "Pa",
+      "Da1",
+      "Ni1",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni1",
+      "Da1",
+      "Pa",
+      "Ma1",
+      "Ga2",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Melakarta 19",
+    "description": "The Da1-Da2 cluster in the upper register gives it an unusual resonant quality, like temple bells with a slight shadow."
+  },
+  {
+    "name": "Natabhairavi",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga2",
+      "Ma1",
+      "Pa",
+      "Da1",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da1",
+      "Pa",
+      "Ma1",
+      "Ga2",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Melakarta 20",
+    "description": "The mother of Bhairavi and parent to an entire universe of melancholic ragas. Vast, maternal, emotionally complete. Singing Natabhairavi feels like being held."
+  },
+  {
+    "name": "Keeravani",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga2",
+      "Ma1",
+      "Pa",
+      "Da1",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da1",
+      "Pa",
+      "Ma1",
+      "Ga2",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Melakarta 21",
+    "description": "The same as a natural minor scale with sharp seventh  ·  strikingly close to Western harmonic minor. It has a quality of yearning that resolves into wonder."
+  },
+  {
+    "name": "Kharaharapriya",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga2",
+      "Ma1",
+      "Pa",
+      "Da2",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da2",
+      "Pa",
+      "Ma1",
+      "Ga2",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Melakarta 22",
+    "description": "The \"everyman's raga\"  ·  widely loved, sung in homes and concert halls alike. Its gentle, natural quality makes it feel like being understood. Parent of Abheri, Nayaki, and many more."
+  },
+  {
+    "name": "Gowrimanohari",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga2",
+      "Ma1",
+      "Pa",
+      "Da2",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da2",
+      "Pa",
+      "Ma1",
+      "Ga2",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Melakarta 23",
+    "description": "Named for Gauri (Parvati). The flat Ga against bright Da2-Ni3 creates an elegant, feminine quality  ·  graceful and devotional."
+  },
+  {
+    "name": "Varunapriya",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga2",
+      "Ma1",
+      "Pa",
+      "Da3",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da3",
+      "Pa",
+      "Ma1",
+      "Ga2",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Melakarta 24",
+    "description": "Named for Varuna, god of waters. The flowing consecutive upper semitones suggest water in motion  ·  deep below, moving above."
+  },
+  {
+    "name": "Mararanjani",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga3",
+      "Ma1",
+      "Pa",
+      "Da1",
+      "Ni1",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni1",
+      "Da1",
+      "Pa",
+      "Ma1",
+      "Ga3",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Melakarta 25",
+    "description": "The bright natural Ga3 with Ri2 in the lower register and the unusual Da cluster gives a surprisingly playful, cheerful feeling."
+  },
+  {
+    "name": "Charukesi",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga3",
+      "Ma1",
+      "Pa",
+      "Da1",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da1",
+      "Pa",
+      "Ma1",
+      "Ga3",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Melakarta 26",
+    "description": "An extraordinary raga  ·  bright Ga3 shadowed by flat Da1 and Ni2. It feels like courage in the face of loss, or joy carrying grief within it. One of the most emotionally complex Melakartas."
+  },
+  {
+    "name": "Sarasangi",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga3",
+      "Ma1",
+      "Pa",
+      "Da1",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da1",
+      "Pa",
+      "Ma1",
+      "Ga3",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Melakarta 27",
+    "description": "Natural Ga3 and Ni3 with flat Da1 creates a distinctive gentle tension. Clear and devotional in character."
+  },
+  {
+    "name": "Harikambhoji",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga3",
+      "Ma1",
+      "Pa",
+      "Da2",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da2",
+      "Pa",
+      "Ma1",
+      "Ga3",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Melakarta 28",
+    "description": "One of the most generative Melakartas  ·  parent to Kamboji, Mohanam, Khamas, Bilahari, and dozens of other beloved janyas. Rich, warm, and welcoming."
+  },
+  {
+    "name": "Dheerasankarabharanam",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga3",
+      "Ma1",
+      "Pa",
+      "Da2",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da2",
+      "Pa",
+      "Ma1",
+      "Ga3",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Melakarta 29",
+    "description": "All natural notes  ·  the \"Western Major scale\" of Carnatic music. Universally loved, capable of expressing the entire range of human emotion. Tyagaraja's most triumphant compositions live here."
+  },
+  {
+    "name": "Naganandini",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga3",
+      "Ma1",
+      "Pa",
+      "Da3",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da3",
+      "Pa",
+      "Ma1",
+      "Ga3",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Melakarta 30",
+    "description": "Named for the divine serpent. The consecutive upper semitones feel sinuous and hypnotic, moving in ways you don't quite expect."
+  },
+  {
+    "name": "Yagapriya",
+    "arohanam": [
+      "Sa",
+      "Ri3",
+      "Ga3",
+      "Ma1",
+      "Pa",
+      "Da1",
+      "Ni1",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni1",
+      "Da1",
+      "Pa",
+      "Ma1",
+      "Ga3",
+      "Ri3",
+      "Sa"
+    ],
+    "type": "Melakarta 31",
+    "description": "The R5 rows begin with Ga2 (Ri3) where Ri would normally be  ·  giving a strikingly compressed lower register. Named for fire rituals (yagas), it has an ancient, ceremonial quality."
+  },
+  {
+    "name": "Ragavardhini",
+    "arohanam": [
+      "Sa",
+      "Ri3",
+      "Ga3",
+      "Ma1",
+      "Pa",
+      "Da1",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da1",
+      "Pa",
+      "Ma1",
+      "Ga3",
+      "Ri3",
+      "Sa"
+    ],
+    "type": "Melakarta 32",
+    "description": "Named \"raga-increaser\"  ·  as if it contains within it the seed of all ragas. The compressed lower tetrachord against a gentle upper register has unexpected richness."
+  },
+  {
+    "name": "Gangeyabhushani",
+    "arohanam": [
+      "Sa",
+      "Ri3",
+      "Ga3",
+      "Ma1",
+      "Pa",
+      "Da1",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da1",
+      "Pa",
+      "Ma1",
+      "Ga3",
+      "Ri3",
+      "Sa"
+    ],
+    "type": "Melakarta 33",
+    "description": "Named for the ornament of the Ganges  ·  the sharp Ni3 over flat Da1, combined with the consecutive lower Ga notes, gives it a sacred, flowing quality."
+  },
+  {
+    "name": "Vagadheeswari",
+    "arohanam": [
+      "Sa",
+      "Ri3",
+      "Ga3",
+      "Ma1",
+      "Pa",
+      "Da2",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da2",
+      "Pa",
+      "Ma1",
+      "Ga3",
+      "Ri3",
+      "Sa"
+    ],
+    "type": "Melakarta 34",
+    "description": "Named for Saraswati, goddess of speech and learning. Its even temperament and balanced notes suggest eloquence and knowledge."
+  },
+  {
+    "name": "Shulini",
+    "arohanam": [
+      "Sa",
+      "Ri3",
+      "Ga3",
+      "Ma1",
+      "Pa",
+      "Da2",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da2",
+      "Pa",
+      "Ma1",
+      "Ga3",
+      "Ri3",
+      "Sa"
+    ],
+    "type": "Melakarta 35",
+    "description": "Named for Shiva's trident  ·  the bright upper tetrachord with the compressed lower register creates something powerful and incisive."
+  },
+  {
+    "name": "Chalanata",
+    "arohanam": [
+      "Sa",
+      "Ri3",
+      "Ga3",
+      "Ma1",
+      "Pa",
+      "Da3",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da3",
+      "Pa",
+      "Ma1",
+      "Ga3",
+      "Ri3",
+      "Sa"
+    ],
+    "type": "Melakarta 36",
+    "description": "The final Ma1 Melakarta  ·  named for movement in dance. Consecutive semitones in both lower and upper registers create a distinctive stepping quality."
+  },
+  {
+    "name": "Salagam",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga1",
+      "Ma2",
+      "Pa",
+      "Da1",
+      "Ni1",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni1",
+      "Da1",
+      "Pa",
+      "Ma2",
+      "Ga1",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 37",
+    "description": "The sharp Ma2 against flat Ri and flat Da creates a gravity and depth that feels different from its Ma1 counterparts. The beginning of the Prati Madhyamam half."
+  },
+  {
+    "name": "Jalarnavam",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga1",
+      "Ma2",
+      "Pa",
+      "Da1",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da1",
+      "Pa",
+      "Ma2",
+      "Ga1",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 38",
+    "description": "Named \"ocean of water\"  ·  the Ma2 gives a sense of vastness and depth that the flat surrounding notes make feel even more spacious."
+  },
+  {
+    "name": "Jhalavarali",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga1",
+      "Ma2",
+      "Pa",
+      "Da1",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da1",
+      "Pa",
+      "Ma2",
+      "Ga1",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 39",
+    "description": "An unusual combination  ·  flat lower notes with sharp Ma2 and natural Ni3. Rarely performed but carries a sense of great antiquity."
+  },
+  {
+    "name": "Navaneetam",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga1",
+      "Ma2",
+      "Pa",
+      "Da2",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da2",
+      "Pa",
+      "Ma2",
+      "Ga1",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 40",
+    "description": "Named for fresh butter (navaneetam)  ·  soft and smooth. The Ma2 brings sharpness to an otherwise gentle raga."
+  },
+  {
+    "name": "Pavani",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga1",
+      "Ma2",
+      "Pa",
+      "Da2",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da2",
+      "Pa",
+      "Ma2",
+      "Ga1",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 41",
+    "description": "Named for purity and the wind. The Ma2 with bright upper notes brings a clear, airy quality despite the flat lower register."
+  },
+  {
+    "name": "Raghupriya",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga1",
+      "Ma2",
+      "Pa",
+      "Da3",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da3",
+      "Pa",
+      "Ma2",
+      "Ga1",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 42",
+    "description": "Named \"dear to Raghu\" (an epithet of Rama). Consecutive semitone pairs in both tetrachords with sharp Ma  ·  structurally unique and surprisingly stately."
+  },
+  {
+    "name": "Gavambhodi",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga2",
+      "Ma2",
+      "Pa",
+      "Da1",
+      "Ni1",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni1",
+      "Da1",
+      "Pa",
+      "Ma2",
+      "Ga2",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 43",
+    "description": "Flat Ri, flat Ga, and flat Da against the sharp Ma  ·  an unusual mix that creates deep introspection and a sense of searching."
+  },
+  {
+    "name": "Bhavapriya",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga2",
+      "Ma2",
+      "Pa",
+      "Da1",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da1",
+      "Pa",
+      "Ma2",
+      "Ga2",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 44",
+    "description": "Named \"dear to emotions.\" The Ma2 brings an elevated longing to the otherwise plaintive flat notes  ·  like yearning for something transcendent."
+  },
+  {
+    "name": "Shubhapantuvarali",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga2",
+      "Ma2",
+      "Pa",
+      "Da1",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da1",
+      "Pa",
+      "Ma2",
+      "Ga2",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 45",
+    "description": "Deep, ancient, almost Sanskrit in its seriousness. Flat Ri, Ga, Da against sharp Ma and Ni3  ·  a combination that feels like it comes from another era. Rare and unforgettable."
+  },
+  {
+    "name": "Shadvidhamargini",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga2",
+      "Ma2",
+      "Pa",
+      "Da2",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da2",
+      "Pa",
+      "Ma2",
+      "Ga2",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 46",
+    "description": "Named for the \"six paths.\" The sharp Ma2 with otherwise moderate notes creates an unusually clear-eyed feeling."
+  },
+  {
+    "name": "Suvarnangi",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga2",
+      "Ma2",
+      "Pa",
+      "Da2",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da2",
+      "Pa",
+      "Ma2",
+      "Ga2",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 47",
+    "description": "Named \"golden-bodied.\" The flat Ri and Ga with bright upper notes and sharp Ma create a golden, glowing quality."
+  },
+  {
+    "name": "Divyamani",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga2",
+      "Ma2",
+      "Pa",
+      "Da3",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da3",
+      "Pa",
+      "Ma2",
+      "Ga2",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 48",
+    "description": "Named \"divine jewel.\" The consecutive upper semitones combined with sharp Ma and flat lower register create something genuinely gem-like  ·  brilliant and rare."
+  },
+  {
+    "name": "Dhavalambari",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga3",
+      "Ma2",
+      "Pa",
+      "Da1",
+      "Ni1",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni1",
+      "Da1",
+      "Pa",
+      "Ma2",
+      "Ga3",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 49",
+    "description": "Named \"white-robed\"  ·  the sharp Ma2 and natural Ga3 against flat Ri and flat Da creates a bright, pure quality."
+  },
+  {
+    "name": "Namanarayani",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga3",
+      "Ma2",
+      "Pa",
+      "Da1",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da1",
+      "Pa",
+      "Ma2",
+      "Ga3",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 50",
+    "description": "Named for saluting Narayana. The Ma2 adds a devotional intensity to the Ri1-Ga3 combination."
+  },
+  {
+    "name": "Kamavardhini",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga3",
+      "Ma2",
+      "Pa",
+      "Da1",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da1",
+      "Pa",
+      "Ma2",
+      "Ga3",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 51",
+    "description": "Also known as Panthuvarali  ·  the flat Ri beside the sharp Ma2 creates a tension that feels urgent and searching. One of the most frequently performed Ma2 ragas."
+  },
+  {
+    "name": "Ramapriya",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga3",
+      "Ma2",
+      "Pa",
+      "Da2",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da2",
+      "Pa",
+      "Ma2",
+      "Ga3",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 52",
+    "description": "Named \"dear to Rama.\" The gentle upper tetrachord with bright Ma2 and flat Ri gives a warm, devotional feeling."
+  },
+  {
+    "name": "Gamanashrama",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga3",
+      "Ma2",
+      "Pa",
+      "Da2",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da2",
+      "Pa",
+      "Ma2",
+      "Ga3",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 53",
+    "description": "The flat Ri1 combined with natural Ga3, sharp Ma2, and bright upper tetrachord creates a striking elevation  ·  like watching a sunrise from a mountaintop ashram."
+  },
+  {
+    "name": "Vishwambhari",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga3",
+      "Ma2",
+      "Pa",
+      "Da3",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da3",
+      "Pa",
+      "Ma2",
+      "Ga3",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Melakarta 54",
+    "description": "Named \"sustainer of the universe.\" Consecutive upper semitones with sharp Ma and flat Ri  ·  expansive and all-encompassing in character."
+  },
+  {
+    "name": "Shamalangi",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga2",
+      "Ma2",
+      "Pa",
+      "Da1",
+      "Ni1",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni1",
+      "Da1",
+      "Pa",
+      "Ma2",
+      "Ga2",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Melakarta 55",
+    "description": "Flat Ga2 and flat Da cluster against sharp Ma2  ·  the combination creates a mysteriously beautiful, twilight feeling."
+  },
+  {
+    "name": "Shanmukhapriya",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga2",
+      "Ma2",
+      "Pa",
+      "Da1",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da1",
+      "Pa",
+      "Ma2",
+      "Ga2",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Melakarta 56",
+    "description": "Named for Shanmukha (Murugan). Widely used in film music  ·  its Ma2 against Ga2 gives it a vivid, almost cinematic quality. One of the more recognizable Ma2 ragas."
+  },
+  {
+    "name": "Simhendramadhyamam",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga2",
+      "Ma2",
+      "Pa",
+      "Da1",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da1",
+      "Pa",
+      "Ma2",
+      "Ga2",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Melakarta 57",
+    "description": "Named \"lion in the middle\"  ·  the sharp Ma2 and sharp Ni3 against flat Ga2 and flat Da1 gives it a bold, contrasting strength."
+  },
+  {
+    "name": "Hemavati",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga2",
+      "Ma2",
+      "Pa",
+      "Da2",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da2",
+      "Pa",
+      "Ma2",
+      "Ga2",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Melakarta 58",
+    "description": "Named for golden snow (Hema = gold). The Ma2 brings a warmth to what would otherwise be a pensive scale."
+  },
+  {
+    "name": "Dharmavati",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga2",
+      "Ma2",
+      "Pa",
+      "Da2",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da2",
+      "Pa",
+      "Ma2",
+      "Ga2",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Melakarta 59",
+    "description": "Named for righteousness (dharma). The Ma2 and Ni3 over flat Ga2 creates a firm, principled, clear quality."
+  },
+  {
+    "name": "Neetimati",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga2",
+      "Ma2",
+      "Pa",
+      "Da3",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da3",
+      "Pa",
+      "Ma2",
+      "Ga2",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Melakarta 60",
+    "description": "Named \"one who has ethics.\" Consecutive upper semitones with sharp Ma  ·  a raga of principled, deliberate movement."
+  },
+  {
+    "name": "Kantamani",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga3",
+      "Ma2",
+      "Pa",
+      "Da1",
+      "Ni1",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni1",
+      "Da1",
+      "Pa",
+      "Ma2",
+      "Ga3",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Melakarta 61",
+    "description": "Named \"gem jewel.\" Bright Ga3 and sharp Ma2 against flat Da cluster  ·  vivid and glittering."
+  },
+  {
+    "name": "Rishabhapriya",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga3",
+      "Ma2",
+      "Pa",
+      "Da1",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da1",
+      "Pa",
+      "Ma2",
+      "Ga3",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Melakarta 62",
+    "description": "Named \"dear to Rishaba\" (Nandi, Shiva's vehicle). Natural Ga3 with sharp Ma2 and flat Da  ·  graceful and noble."
+  },
+  {
+    "name": "Latangi",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga3",
+      "Ma2",
+      "Pa",
+      "Da1",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da1",
+      "Pa",
+      "Ma2",
+      "Ga3",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Melakarta 63",
+    "description": "Named for a graceful woman (latangi). Natural Ga3 and Ni3 with sharp Ma2 and flat Da creates a striking, elegant quality."
+  },
+  {
+    "name": "Vachaspati",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga3",
+      "Ma2",
+      "Pa",
+      "Da2",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da2",
+      "Pa",
+      "Ma2",
+      "Ga3",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Melakarta 64",
+    "description": "Named for Brihaspati, the god of wisdom and speech. Natural Ga3 with sharp Ma2 and gentle upper notes  ·  articulate and wise."
+  },
+  {
+    "name": "Mechakalyani",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga3",
+      "Ma2",
+      "Pa",
+      "Da2",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da2",
+      "Pa",
+      "Ma2",
+      "Ga3",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Melakarta 65",
+    "description": "The luminous parent of Kalyani  ·  the sharpened Ma2 gives everything a soaring, golden-evening quality. One of the most performed Melakartas, especially at dusk."
+  },
+  {
+    "name": "Chitrambari",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga3",
+      "Ma2",
+      "Pa",
+      "Da3",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da3",
+      "Pa",
+      "Ma2",
+      "Ga3",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Melakarta 66",
+    "description": "Named \"dressed in pictures\"  ·  the consecutive upper notes with sharp Ma2 and natural Ga3 create a vivid, richly ornamented feeling."
+  },
+  {
+    "name": "Sucharitra",
+    "arohanam": [
+      "Sa",
+      "Ri3",
+      "Ga3",
+      "Ma2",
+      "Pa",
+      "Da1",
+      "Ni1",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni1",
+      "Da1",
+      "Pa",
+      "Ma2",
+      "Ga3",
+      "Ri3",
+      "Sa"
+    ],
+    "type": "Melakarta 67",
+    "description": "Named \"one with good character.\" The compressed lower register with sharp Ma2 and flat Da cluster  ·  rare and characterful."
+  },
+  {
+    "name": "Jyotiswarupini",
+    "arohanam": [
+      "Sa",
+      "Ri3",
+      "Ga3",
+      "Ma2",
+      "Pa",
+      "Da1",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da1",
+      "Pa",
+      "Ma2",
+      "Ga3",
+      "Ri3",
+      "Sa"
+    ],
+    "type": "Melakarta 68",
+    "description": "Named \"embodiment of light.\" Sharp Ma2 against the compressed lower tetrachord creates a luminous quality  ·  light in the darkness."
+  },
+  {
+    "name": "Dhatuvardani",
+    "arohanam": [
+      "Sa",
+      "Ri3",
+      "Ga3",
+      "Ma2",
+      "Pa",
+      "Da1",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da1",
+      "Pa",
+      "Ma2",
+      "Ga3",
+      "Ri3",
+      "Sa"
+    ],
+    "type": "Melakarta 69",
+    "description": "Named \"increaser of minerals/elements.\" The sharp Ni3 and Ma2 over flat lower notes create a sense of growth and elemental force."
+  },
+  {
+    "name": "Nasikabhushani",
+    "arohanam": [
+      "Sa",
+      "Ri3",
+      "Ga3",
+      "Ma2",
+      "Pa",
+      "Da2",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da2",
+      "Pa",
+      "Ma2",
+      "Ga3",
+      "Ri3",
+      "Sa"
+    ],
+    "type": "Melakarta 70",
+    "description": "Named for a nose ornament  ·  delicate and precise. The compressed lower tetrachord with gentle upper notes and sharp Ma2 has a fineness to it."
+  },
+  {
+    "name": "Kosalam",
+    "arohanam": [
+      "Sa",
+      "Ri3",
+      "Ga3",
+      "Ma2",
+      "Pa",
+      "Da2",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da2",
+      "Pa",
+      "Ma2",
+      "Ga3",
+      "Ri3",
+      "Sa"
+    ],
+    "type": "Melakarta 71",
+    "description": "Named for the ancient kingdom of Kosala (Rama's birthplace). Bright upper notes over the compressed lower tetrachord convey a regal, ancient grandeur."
+  },
+  {
+    "name": "Rasikapriya",
+    "arohanam": [
+      "Sa",
+      "Ri3",
+      "Ga3",
+      "Ma2",
+      "Pa",
+      "Da3",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da3",
+      "Pa",
+      "Ma2",
+      "Ga3",
+      "Ri3",
+      "Sa"
+    ],
+    "type": "Melakarta 72",
+    "description": "The 72nd and final Melakarta  ·  \"dear to the connoisseur.\" Consecutive semitone pairs in both registers with sharp Ma2: the raga that rewards careful listening. A fitting end to the complete system."
+  },
+  {
+    "name": "Mohanam",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga3",
+      "Pa",
+      "Da2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Da2",
+      "Pa",
+      "Ga3",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Janya · Harikambhoji (28)",
+    "description": "Pentatonic and universally beloved  ·  this is the raga people hum without knowing it. Pure joy, wonder, and the sweetness of longing from a distance."
+  },
+  {
+    "name": "Hamsadhwani",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga3",
+      "Pa",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Pa",
+      "Ga3",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Janya · Shankarabharanam (29)",
+    "description": "The swan's voice. Bright, auspicious, and joyful  ·  played at the start of concerts and ceremonies. Vatapi Ganapatim makes this raga sing for everyone who hears it."
+  },
+  {
+    "name": "Bilahari",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga3",
+      "Pa",
+      "Da2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da2",
+      "Pa",
+      "Ma1",
+      "Ga3",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Janya · Harikhamboji (28)",
+    "description": "A radiant raga with a direct pentatonic ascent and a fuller descent. The missing Ma and Ni on the way up give Bilahari lift, while the descent restores them for a rounded, joyful return."
+  },
+  {
+    "name": "Sahana",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga3",
+      "Ma1",
+      "Pa",
+      "Ma1",
+      "Da2",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da2",
+      "Pa",
+      "Ma1",
+      "Ga3",
+      "Ri2",
+      "Ga3",
+      "Sa"
+    ],
+    "type": "Janya · Harikambhoji (28)",
+    "description": "Patience and endurance  ·  that's what sahana means. A raga of quiet strength, love that persists despite difficulty."
+  },
+  {
+    "name": "Kalyana Vasantham",
+    "arohanam": [
+      "Sa",
+      "Ga2",
+      "Ma1",
+      "Da1",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da1",
+      "Pa",
+      "Ma1",
+      "Ga2",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Janya · Keeravani (21)",
+    "description": "Spring-time bliss  ·  a joyful, rare pentatonic ascending that skips notes in surprising ways. The kind of raga that makes you smile immediately."
+  },
+  {
+    "name": "Bowli",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga3",
+      "Pa",
+      "Da1",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da1",
+      "Pa",
+      "Ga3",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Janya · Mayamalavagowla (15)",
+    "description": "A classic early morning raga. Invokes waking up to fresh morning dew and temple bells. Famous for MS Subbulakshmi's Sriman Narayana."
+  },
+  {
+    "name": "Malahari",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ma1",
+      "Pa",
+      "Da1",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Da1",
+      "Pa",
+      "Ma1",
+      "Ga3",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Janya · Mayamalavagowla (15)",
+    "description": "A gentle morning raga traditionally used for early geethams. Its pentatonic ascent is simple and stable, while Ga3 appears only in the descent, giving the return phrase its characteristic color."
+  },
+  {
+    "name": "Bhairavi",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga2",
+      "Ma1",
+      "Pa",
+      "Da2",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da1",
+      "Pa",
+      "Ma1",
+      "Ga2",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Janya · Natabhairavi (20)",
+    "description": "A raga that holds entire lifetimes of emotion. Bhairavi is sung at the end of concerts as a farewell  ·  because once you've heard it, nothing else needs to be said."
+  },
+  {
+    "name": "Kamboji",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga3",
+      "Ma1",
+      "Pa",
+      "Da2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da2",
+      "Pa",
+      "Ma1",
+      "Ga3",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Janya · Harikambhoji (28)",
+    "description": "A raga of temples and processions  ·  heroic devotion, the feeling of walking toward something sacred. The avarohanam's Ni2 (vakra) is its signature fingerprint."
+  },
+  {
+    "name": "Todi",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ga2",
+      "Ma1",
+      "Pa",
+      "Da1",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da1",
+      "Pa",
+      "Ma1",
+      "Ga2",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Janya · Hanumatodi (8)",
+    "description": "The raga of early mornings and deep feeling. Todi holds sadness beautifully  ·  not wallowing in it, but sitting with it until it becomes something like peace."
+  },
+  {
+    "name": "Saveri",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ma1",
+      "Pa",
+      "Da1",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni3",
+      "Da1",
+      "Pa",
+      "Ma1",
+      "Ga3",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Janya · Mayamalavagowla (15)",
+    "description": "Ancient and compassionate  ·  Saveri's pentatonic ascent feels simple until you realise how much it says with so few notes. A beautiful derivative of Mayamalavagowla."
+  },
+  {
+    "name": "Hindolam",
+    "arohanam": [
+      "Sa",
+      "Ga2",
+      "Ma1",
+      "Da1",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da1",
+      "Ma1",
+      "Ga2",
+      "Sa"
+    ],
+    "type": "Janya · Natabhairavi (20)",
+    "description": "Five notes and a universe of feeling. Hindolam is the raga of deep night and unresolved longing  ·  sung after midnight, when everything is quiet and the heart speaks."
+  },
+  {
+    "name": "Madhyamavati",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ma1",
+      "Pa",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Pa",
+      "Ma1",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Janya · Kharaharapriya (22)",
+    "description": "A majestic pentatonic scale (Audava) that traditionally concludes concerts. Its open fifths and skipping of Ga and Da create a sense of deep stability and resolution. One of the most auspicious ragas in the system."
+  },
+  {
+    "name": "Abheri",
+    "arohanam": [
+      "Sa",
+      "Ga2",
+      "Ma1",
+      "Pa",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da2",
+      "Pa",
+      "Ma1",
+      "Ga2",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Janya · Kharaharapriya (22)",
+    "description": "A raga for still waters  ·  peaceful, devotional, clear. Nagumomu Ganaleni is one of the most beloved Carnatic compositions, and Abheri carries it perfectly."
+  },
+  {
+    "name": "Abhogi",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga2",
+      "Ma1",
+      "Da2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Da2",
+      "Ma1",
+      "Ga2",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Janya · Kharaharapriya (22)",
+    "description": "A deeply emotive asymmetric pentatonic scale missing Pa and Ni. Without the stabilizing fifth (Pa), Abhogi feels restless and reaching, making it perfect for intense devotional pleading."
+  },
+  {
+    "name": "Kapi",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ma1",
+      "Pa",
+      "Ni3",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da2",
+      "Ni2",
+      "Pa",
+      "Ma1",
+      "Ga2",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Janya (Bhashanga) · Kharaharapriya (22)",
+    "description": "A highly expressive, bhava-rich raga with vakra movement and bhasanga color. The ascent commonly uses Ni3 while the descent leans on Ni2, giving Kapi its distinctive emotional pull."
+  },
+  {
+    "name": "Durga",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ma1",
+      "Pa",
+      "Da2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Da2",
+      "Pa",
+      "Ma1",
+      "Ri2",
+      "Sa"
+    ],
+    "type": "Janya · Shankarabharanam (29)",
+    "description": "Five bright notes  ·  Durga is used in auspicious settings because of its bright, open quality. Close to the Western pentatonic major scale that appears in folk music across the world."
+  },
+  {
+    "name": "Revati",
+    "arohanam": [
+      "Sa",
+      "Ri1",
+      "Ma1",
+      "Pa",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Pa",
+      "Ma1",
+      "Ri1",
+      "Sa"
+    ],
+    "type": "Janya · Hanumatodi (8)",
+    "description": "Simple, pentatonic, and quietly beautiful. Revati doesn't demand  ·  it simply settles in the ear like evening light."
+  },
+  {
+    "name": "Margahindolam",
+    "arohanam": [
+      "Sa",
+      "Ri2",
+      "Ga2",
+      "Ma1",
+      "Pa",
+      "Da2",
+      "Ni2",
+      "Sa"
+    ],
+    "avarohanam": [
+      "Sa",
+      "Ni2",
+      "Da2",
+      "Pa",
+      "Ma1",
+      "Ga2",
+      "Sa"
+    ],
+    "type": "Janya · Kharaharapriya (22)",
+    "description": "The avarohanam skips Sa's Ri entirely, giving it a characteristically smooth, rolling descent. Gentle and inward, like a slow morning walk to the temple. There is no youtube video of the arohanam and avarohanam but this video shares some notes in the raagam."
+  }
+]

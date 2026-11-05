@@ -17,8 +17,11 @@ import { applyApiSecurity, rejectDisallowedOrigin } from './_security.js';
 
 const MONGODB_URI   = process.env.MONGODB_URI;
 const GCP_PROJECT   = process.env.GOOGLE_CLOUD_PROJECT  || 'project-24a53985-305d-4031-ae8';
-const GCP_LOCATION  = process.env.GOOGLE_CLOUD_LOCATION || 'us-central1';
-const GEMINI_MODEL  = 'gemini-2.5-flash';
+// Current Gemini models are served only from Vertex AI's global endpoint.
+// Separate from GOOGLE_CLOUD_LOCATION, which Agent Engine needs as us-central1.
+const GEMINI_LOCATION = process.env.GEMINI_LOCATION || 'global';
+const GEMINI_HOST   = GEMINI_LOCATION === 'global' ? 'aiplatform.googleapis.com' : `${GEMINI_LOCATION}-aiplatform.googleapis.com`;
+const GEMINI_MODEL  = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
 const EVALUATED_TOOLS = ['tutor', 'singback', 'lesson-feedback'];
 
 let cachedClient = null;
@@ -185,7 +188,7 @@ async function callGemini(learnerContext) {
   const token = typeof access === 'string' ? access : access?.token;
 
   const res = await fetch(
-    `https://${GCP_LOCATION}-aiplatform.googleapis.com/v1/projects/${GCP_PROJECT}/locations/${GCP_LOCATION}/publishers/google/models/${GEMINI_MODEL}:generateContent`,
+    `https://${GEMINI_HOST}/v1/projects/${GCP_PROJECT}/locations/${GEMINI_LOCATION}/publishers/google/models/${GEMINI_MODEL}:generateContent`,
     {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },

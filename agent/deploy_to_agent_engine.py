@@ -85,12 +85,16 @@ app = reasoning_engines.AdkApp(
     enable_tracing=True,
 )
 
-REQUIREMENTS = [
-    "google-cloud-aiplatform[adk]>=1.87.0",
-    "google-adk>=1.0.0",
-    "mcp>=1.0.0",
-    "cloudpickle",
+# Pin to the versions installed here. Agent Engine unpickles the agent with
+# whatever it installs, and a newer major version can drop modules the pickle
+# needs (mcp 2.x removed mcp.shared.session).
+from importlib.metadata import version  # noqa: E402
+
+REQUIREMENTS = [f"google-cloud-aiplatform[adk]=={version('google-cloud-aiplatform')}"] + [
+    f"{pkg}=={version(pkg)}"
+    for pkg in ("google-adk", "google-genai", "mcp", "cloudpickle", "pydantic")
 ]
+print(f"  Packages: {', '.join(REQUIREMENTS)}\n")
 
 if EXISTING:
     remote_agent = reasoning_engines.ReasoningEngine(EXISTING)

@@ -35,7 +35,9 @@ async function writeSessionViaMCP(userId, sessionData) {
   if (!agentEngineResource) return false;
   try {
     const client = getAuthClient();
-    const { token } = await client.getAccessToken();
+    // Local credentials (GoogleAuth) resolve to a string; Vercel's refresh-token client to { token }.
+    const access = await client.getAccessToken();
+    const token = typeof access === 'string' ? access : access?.token;
     const { tool = '', raga = '', durationMinutes = 0, notes = '' } = sessionData;
 
     const sessionRes = await fetch(

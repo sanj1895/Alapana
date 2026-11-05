@@ -180,7 +180,9 @@ CONTENT RULES:
 
 async function callGemini(learnerContext) {
   const client = getAuthClient();
-  const { token } = await client.getAccessToken();
+  // Local credentials (GoogleAuth) resolve to a string; Vercel's refresh-token client to { token }.
+  const access = await client.getAccessToken();
+  const token = typeof access === 'string' ? access : access?.token;
 
   const res = await fetch(
     `https://${GCP_LOCATION}-aiplatform.googleapis.com/v1/projects/${GCP_PROJECT}/locations/${GCP_LOCATION}/publishers/google/models/${GEMINI_MODEL}:generateContent`,

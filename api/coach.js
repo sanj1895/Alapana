@@ -373,7 +373,9 @@ export default async function handler(req, res) {
     const enrichedMessage = `${userContext || ''}${conversationContext || ''}Current user message: ${message}`.trim();
 
     const client = getAuthClient();
-    const { token } = await client.getAccessToken();
+    // Local credentials (GoogleAuth) resolve to a string; Vercel's refresh-token client to { token }.
+    const access = await client.getAccessToken();
+    const token = typeof access === 'string' ? access : access?.token;
 
     // Create a session keyed by userId so the ADK agent can maintain conversation state.
     // Note: user_id uses snake_case as required by the Vertex AI Agent Engine API.

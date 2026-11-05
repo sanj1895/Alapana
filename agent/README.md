@@ -12,7 +12,7 @@ React App (alapana.vercel.app)
 Vertex AI Agent Engine          ← Google Cloud Agent Builder
     ↓
 ADK Agent  (agent/agent.py)
-├── Gemini 2.5 Flash            ← reasoning model
+├── Gemini 3.8 Flash            ← reasoning model (global endpoint)
 └── MongoDB MCP Server          ← practice history tool
         ↓
 MongoDB Atlas  (sessions collection)
@@ -20,7 +20,7 @@ MongoDB Atlas  (sessions collection)
 
 Raga identification (Viveka feature):
 ```
-React App → /api/ai/rank-ragas → Go AI gateway → Gemini 2.5 Flash (Vertex AI)
+React App → /api/ai/rank-ragas → Go AI gateway → Gemini 3.8 Flash (Vertex AI)
 ```
 
 ## Agent Engine Deployment
@@ -50,6 +50,10 @@ AGENT_ENGINE_RESOURCE=projects/project-24a53985-305d-4031-ae8/locations/us-centr
 ```
 
 Once set, `/api/coach` routes through Agent Engine automatically. The agent handles MongoDB MCP tool calls server-side.
+
+To ship a change to `agent.py` later, run the same script with `AGENT_ENGINE_RESOURCE` set (it reads `.env`). It updates the existing agent in place, so the resource name in Vercel stays the same.
+
+Agent Engine runs in `us-central1`, but current Gemini models are only served from Vertex AI's global endpoint. `agent.py` uses a small `GlobalGemini` model class for that.
 
 ## Local Development
 
@@ -90,11 +94,11 @@ When a student sends a message to the coach:
 1. `/api/coach` calls the Agent Engine REST API with the message + userId
 2. Agent Engine invokes the ADK agent (`agent/agent.py`)
 3. The agent calls **MongoDB MCP `find`** to retrieve the student's practice history
-4. **Gemini 2.5 Flash** reasons over the history and the student's request
+4. **Gemini 3.8 Flash** reasons over the history and the student's request
 5. The agent recommends specific tools in the Ālāpana app (Gurukul, Raga Kosha, Viveka, etc.)
 6. After a session, the agent calls **MongoDB MCP `insertOne`** to save progress
 
-For raga identification (Viveka), the Go AI gateway (`gateway/`) builds the prompt from the transcribed swara events and the local candidate shortlist, then calls Gemini 2.5 Flash via Vertex AI.
+For raga identification (Viveka), the Go AI gateway (`gateway/`) builds the prompt from the transcribed swara events and the local candidate shortlist, then calls Gemini 3.8 Flash via Vertex AI.
 
 ## MongoDB Track — Partner Integration
 

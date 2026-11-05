@@ -1,5 +1,8 @@
 import os
+from functools import cached_property
+
 from google.adk.agents import Agent
+from google.adk.models import Gemini
 from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset, StdioConnectionParams
 from mcp import StdioServerParameters
 
@@ -101,8 +104,22 @@ GRAHA BHEDAM — modal shift tool. Shift root note, discover which raga the same
    (which you usually do from the PRESCRIBED NEXT EXERCISE), skip the question and prescribe.
 6. Keep responses under 150 words. Direct and specific."""
 
+
+class GlobalGemini(Gemini):
+    """Gemini on Vertex AI's global endpoint.
+
+    Current Gemini models are only served from the global location, while
+    Agent Engine itself runs in us-central1 and sets that as the default.
+    """
+
+    @cached_property
+    def api_client(self):
+        from google.genai import Client
+        return Client(vertexai=True, location="global")
+
+
 root_agent = Agent(
-    model="gemini-2.5-flash",
+    model=GlobalGemini(model="gemini-3.8-flash"),
     name="alapana_coach",
     description="Carnatic music practice coach with MongoDB memory",
     instruction=SYSTEM_PROMPT,

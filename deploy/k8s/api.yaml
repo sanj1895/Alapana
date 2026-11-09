@@ -1,0 +1,96 @@
+# The Node API functions (api/*.js) behind server/dev-server.js.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  labels:
+    app.kubernetes.io/name: api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: api
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: api
+          image: alapana/api
+          imagePullPolicy: Never
+          ports:
+            - name: http
+              containerPort: 3001
+          envFrom:
+            - configMapRef:
+                name: alapana-config
+          env:
+            - name: PORT
+              value: "3001"
+            - name: MONGODB_URI
+              value: mongodb://mongo:27017/alapana
+            - name: CLERK_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: alapana-secrets
+                  key: CLERK_SECRET_KEY
+            - name: GOOGLE_CREDENTIALS_B64
+              valueFrom:
+                secretKeyRef:
+                  name: alapana-secrets
+                  key: GOOGLE_CREDENTIALS_B64
+            - name: AGENT_ENGINE_RESOURCE
+              valueFrom:
+                secretKeyRef:
+                  name: alapana-secrets
+                  key: AGENT_ENGINE_RESOURCE
+                  optional: true
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 5
+            failureThreshold: 2
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 10
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 50m
+              memory: 96Mi
+            limits:
+              memory: 384Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api
+  labels:
+    app.kubernetes.io/name: api
+spec:
+  selector:
+    app.kubernetes.io/name: api
+  ports:
+    - name: http
+      port: 3001
+      targetPort: http

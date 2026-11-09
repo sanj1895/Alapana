@@ -1,0 +1,28 @@
+# Alapana on Kubernetes: web, api, gateway, Redis and MongoDB behind one Ingress.
+#   kubectl apply -k deploy/k8s        (or let Argo CD sync it: deploy/argocd)
+#
+# Needs the alapana namespace and alapana-secrets first: deploy/create-secret.sh
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: alapana
+labels:
+  - pairs:
+      app.kubernetes.io/part-of: alapana
+    includeTemplates: true
+resources:
+  - config.yaml
+  - gateway.yaml
+  - api.yaml
+  - web.yaml
+  - redis.yaml
+  - mongo.yaml
+  - ingress.yaml
+# Images come from deploy/build-images.sh, loaded straight into kind.
+# To roll out a new build under a new tag, change newTag here and push.
+images:
+  - name: alapana/gateway
+    newTag: local
+  - name: alapana/api
+    newTag: local
+  - name: alapana/web
+    newTag: local

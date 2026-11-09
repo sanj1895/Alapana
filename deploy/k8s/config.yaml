@@ -1,0 +1,12 @@
+# Settings shared by the api and gateway. Secrets live in alapana-secrets,
+# which deploy/create-secret.sh creates outside git.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alapana-config
+data:
+  GOOGLE_CLOUD_PROJECT: project-24a53985-305d-4031-ae8
+  # The app is served from http://localhost through the Ingress. Both services
+  # add this to their built-in allowlist, and the gateway also checks it
+  # against the Clerk token's azp claim.
+  ALLOWED_ORIGINS: http://localhost

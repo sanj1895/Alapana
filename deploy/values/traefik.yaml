@@ -1,0 +1,14 @@
+# Helm values for Traefik, the Ingress controller on the local kind cluster.
+#   helm install traefik traefik/traefik -n traefik --create-namespace -f deploy/values/traefik.yaml
+#
+# kind forwards localhost:80 to node port 30080 (deploy/kind-config.yaml).
+# Traefik replaces ingress-nginx, which was retired in March 2026.
+service:
+  spec:
+    type: NodePort
+ports:
+  web:
+    nodePort: 30080
+ingressClass:
+  enabled: true
+  isDefaultClass: true

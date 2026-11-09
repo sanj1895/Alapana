@@ -1,0 +1,15 @@
+# Local Kubernetes cluster for Alapana:
+#   kind create cluster --config deploy/kind-config.yaml
+#
+# http://localhost on your machine reaches node port 30080, where Traefik
+# (deploy/values/traefik.yaml) serves the Ingress. Bound to 127.0.0.1 only.
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: alapana
+nodes:
+  - role: control-plane
+    extraPortMappings:
+      - containerPort: 30080
+        hostPort: 80
+        listenAddress: "127.0.0.1"
+        protocol: TCP

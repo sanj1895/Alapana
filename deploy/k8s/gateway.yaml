@@ -1,0 +1,94 @@
+# The Go AI gateway (gateway/). Two replicas share rate limits through Redis.
+# Port 8080 serves /api/ai/* through the Ingress; port 9090 serves /metrics
+# to Prometheus only (deploy/monitoring/servicemonitor.yaml).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+  labels:
+    app.kubernetes.io/name: gateway
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: gateway
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: gateway
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532 # distroless "nonroot"
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: gateway
+          image: alapana/gateway
+          imagePullPolicy: Never # loaded by deploy/build-images.sh, never pulled
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: metrics
+              containerPort: 9090
+          envFrom:
+            - configMapRef:
+                name: alapana-config
+          env:
+            - name: METRICS_ADDR
+              value: ":9090"
+            - name: REDIS_URL
+              value: redis://redis:6379
+            - name: CLERK_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: alapana-secrets
+                  key: CLERK_SECRET_KEY
+            - name: GOOGLE_CREDENTIALS_B64
+              valueFrom:
+                secretKeyRef:
+                  name: alapana-secrets
+                  key: GOOGLE_CREDENTIALS_B64
+          # Ready: take traffic. The gateway falls back to in-memory limits when
+          # Redis is down, so Redis is deliberately not part of readiness.
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 5
+            failureThreshold: 2
+          # Alive: restart after 30 seconds without an answer.
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 10
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 50m
+              memory: 32Mi
+            limits:
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway
+  labels:
+    app.kubernetes.io/name: gateway
+spec:
+  selector:
+    app.kubernetes.io/name: gateway
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+    - name: metrics
+      port: 9090
+      targetPort: metrics

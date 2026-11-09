@@ -56,6 +56,8 @@ kubectl apply -k deploy/k8s
 kubectl -n alapana get pods -w   # wait until every pod is 1/1 Running
 ```
 
+`-w` keeps watching and never exits on its own: once every pod is `1/1 Running`, press Ctrl-C.
+
 Open [http://localhost](http://localhost) and sign in.
 
 Every container has a **readiness probe**, which keeps a pod out of the Service until it answers, and a **liveness probe**, which restarts it when it stops answering. The three app services answer `GET /health`, Redis must answer `PING`, and MongoDB must answer a `ping` command. To watch them work, delete a gateway pod and see its replacement join only once it is ready:

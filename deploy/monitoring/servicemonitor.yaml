@@ -1,0 +1,16 @@
+# Tells Prometheus to scrape every gateway pod's metrics port (9090) every 15 s.
+# The job label becomes "gateway", the Service name, which the dashboard filters on.
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: gateway
+  labels:
+    app.kubernetes.io/name: gateway
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: gateway
+  endpoints:
+    - port: metrics
+      path: /metrics
+      interval: 15s

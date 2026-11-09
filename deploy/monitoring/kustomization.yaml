@@ -1,0 +1,22 @@
+# Prometheus scrape config and Grafana dashboard for the gateway.
+# Needs kube-prometheus-stack installed first (deploy/values/kube-prometheus-stack.yaml),
+# which provides the ServiceMonitor type and the Grafana dashboard sidecar.
+#   kubectl apply -k deploy/monitoring
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: alapana
+labels:
+  - pairs:
+      app.kubernetes.io/part-of: alapana
+resources:
+  - servicemonitor.yaml
+# Grafana's sidecar loads any ConfigMap labelled grafana_dashboard=1.
+# Edit the dashboard in Grafana, then export its JSON over gateway-dashboard.json.
+configMapGenerator:
+  - name: alapana-gateway-dashboard
+    files:
+      - gateway-dashboard.json
+    options:
+      disableNameSuffixHash: true
+      labels:
+        grafana_dashboard: "1"

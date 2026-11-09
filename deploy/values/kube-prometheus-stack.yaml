@@ -1,0 +1,37 @@
+# Helm values for Prometheus and Grafana on the local kind cluster.
+#   helm install monitoring prometheus-community/kube-prometheus-stack \
+#     -n monitoring --create-namespace -f deploy/values/kube-prometheus-stack.yaml
+#
+# Prometheus picks up every ServiceMonitor in the cluster (deploy/monitoring
+# adds one for the gateway), and Grafana loads every ConfigMap labelled
+# grafana_dashboard=1 from any namespace.
+
+prometheus:
+  prometheusSpec:
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    ruleSelectorNilUsesHelmValues: false
+    retention: 3d
+
+grafana:
+  sidecar:
+    dashboards:
+      enabled: true
+      label: grafana_dashboard
+      labelValue: "1"
+      searchNamespace: ALL
+
+# No alert receivers are set up locally.
+alertmanager:
+  enabled: false
+
+# kind binds these control-plane components to 127.0.0.1, so Prometheus cannot
+# scrape them and they would only show as down.
+kubeEtcd:
+  enabled: false
+kubeControllerManager:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeProxy:
+  enabled: false

@@ -45,9 +45,14 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /data/db
+  # The label is written out because Kustomize versions disagree on whether
+  # `labels` reaches volume claim templates (v5.8.1 adds it, v5.8.3 does not),
+  # and Kubernetes forbids changing a StatefulSet's templates after creation.
   volumeClaimTemplates:
     - metadata:
         name: data
+        labels:
+          app.kubernetes.io/part-of: alapana
       spec:
         accessModes: ["ReadWriteOnce"]
         resources:

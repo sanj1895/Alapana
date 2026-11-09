@@ -62,7 +62,7 @@ The browser never sends the AI a prompt. It sends only the notes it heard and so
 
 The coach is an agent built with Google's Agent Development Kit (ADK), deployed on Vertex AI Agent Engine, and it reads and writes your practice history in MongoDB Atlas through a MongoDB MCP server.
 
-**Built with:** React, Vite, Tailwind, Web Audio API, Go, Gemini 3.8 Flash, Vertex AI Agent Engine, Google ADK, MongoDB Atlas, Redis, Docker, Vercel, Cloud Run
+**Built with:** React, Vite, Tailwind, Web Audio API, Go, Gemini 3.8 Flash, Vertex AI Agent Engine, Google ADK, MongoDB Atlas, Redis, Docker, Kubernetes, Prometheus, Grafana, Argo CD, Vercel, Cloud Run
 
 ## Run it yourself
 
@@ -88,6 +88,10 @@ Open [http://localhost:5173](http://localhost:5173). To fill the local database 
 ```bash
 docker compose run --rm seed
 ```
+
+### On Kubernetes
+
+To run it on a local Kubernetes cluster instead, with health probes, Prometheus and Grafana watching the AI gateway, and Argo CD deploying from git, follow [deploy/README.md](deploy/README.md).
 
 ### The manual way
 
@@ -159,6 +163,7 @@ If you want to test the agent by itself, run `adk web agent` and open [http://lo
 ```
 agent/     The coach agent and the script that deploys it
 api/       Server routes the frontend calls
+deploy/    Kubernetes manifests, monitoring and Argo CD for a local cluster
 gateway/   The Go AI gateway that builds prompts and calls Gemini
 server/    A local server that runs the api/ routes during development
 src/       The React app

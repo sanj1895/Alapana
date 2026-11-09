@@ -77,10 +77,12 @@ MONGODB_URI=mongodb://localhost:27017/alapana DEMO_USER_ID=<your Clerk user ID> 
 ## 3. Watch the gateway with Prometheus and Grafana
 
 ```bash
-helm install monitoring prometheus-community/kube-prometheus-stack \
+helm install monitoring prometheus-community/kube-prometheus-stack --version 92.22.0 \
   -n monitoring --create-namespace -f deploy/values/kube-prometheus-stack.yaml
 kubectl apply -k deploy/monitoring
 ```
+
+The chart is pinned because 93.x ships prometheus-operator v0.95.1, which has no arm64 image, so it cannot start on Apple silicon. Move to a newer chart once its operator image is published for arm64.
 
 Grafana:
 
@@ -158,6 +160,7 @@ Pods use `imagePullPolicy: Never`, so they only ever run images loaded by `build
 | --- | --- |
 | `kind create cluster` says port 80 is in use | Another program has port 80. Change `hostPort` in `kind-config.yaml` to `8080` and `ALLOWED_ORIGINS` in `k8s/config.yaml` to `http://localhost:8080`, then recreate the cluster |
 | Pod status `ErrImageNeverPull` | The images are not in kind yet. Run `deploy/build-images.sh` |
+| `ImagePullBackOff` with "no match for platform in manifest" | The image has no build for your CPU (arm64 on Apple silicon). Pin the chart to a version whose images do, as step 3 does |
 | Pod status `CreateContainerConfigError` | `alapana-secrets` is missing. Run `deploy/create-secret.sh` |
 | Sign-in works but AI features return 401 or 403 | The address in the browser must exactly match `ALLOWED_ORIGINS`, because the gateway checks it against the Clerk token |
 | Clerk will not load | Use the development keys (`pk_test_…`). Production keys only work on the production domain |

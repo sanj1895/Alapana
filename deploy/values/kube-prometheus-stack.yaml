@@ -1,6 +1,9 @@
 # Helm values for Prometheus and Grafana on the local kind cluster.
-#   helm install monitoring prometheus-community/kube-prometheus-stack \
+#   helm install monitoring prometheus-community/kube-prometheus-stack --version 92.22.0 \
 #     -n monitoring --create-namespace -f deploy/values/kube-prometheus-stack.yaml
+#
+# Pinned to 92.22.0 (prometheus-operator v0.94.2): 93.x ships operator v0.95.1,
+# which has no arm64 image and fails with ImagePullBackOff on Apple silicon.
 #
 # Prometheus picks up every ServiceMonitor in the cluster (deploy/monitoring
 # adds one for the gateway), and Grafana loads every ConfigMap labelled

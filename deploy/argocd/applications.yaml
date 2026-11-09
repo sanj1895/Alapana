@@ -1,0 +1,46 @@
+# Argo CD keeps the cluster in sync with deploy/k8s and deploy/monitoring on
+# main of github.com/sanj1895/Alapana. Apply once after installing Argo CD:
+#   kubectl apply -n argocd -f deploy/argocd/applications.yaml
+#
+# Automated sync applies each push to main. Prune deletes what is removed from
+# git, and selfHeal reverts edits made directly in the cluster.
+# alapana-secrets is not in git, so Argo CD never touches it.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: alapana
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/sanj1895/Alapana.git
+    targetRevision: main
+    path: deploy/k8s
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: alapana
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: alapana-monitoring
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/sanj1895/Alapana.git
+    targetRevision: main
+    path: deploy/monitoring
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: alapana
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

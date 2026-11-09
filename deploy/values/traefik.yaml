@@ -12,3 +12,12 @@ ports:
 ingressClass:
   enabled: true
   isDefaultClass: true
+# Argo CD reports an Ingress as Progressing until its status has an address.
+# A NodePort Service has no address to copy, so publish the one kind forwards
+# from instead.
+providers:
+  kubernetesIngress:
+    publishedService:
+      enabled: false
+    ingressEndpoint:
+      ip: 127.0.0.1

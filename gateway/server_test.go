@@ -38,17 +38,22 @@ func (f *fakeLLM) Generate(_ context.Context, spec promptSpec) (string, error) {
 	return f.reply, f.err
 }
 
-func newTestServer(t *testing.T, llm *fakeLLM) http.Handler {
+func newTestAPI(t *testing.T, llm *fakeLLM) *server {
 	t.Helper()
-	s := &server{
+	return &server{
 		llm:     llm,
 		limiter: newMemoryLimiter([]window{{Name: "burst", Limit: 3, Period: time.Minute}}, time.Now),
 		auth:    headerAuth{},
 		origins: toSet(defaultOrigins),
 		dict:    mustDictionary(t),
 		log:     discardLogger(),
+		metrics: newMetrics(),
 	}
-	return s.routes()
+}
+
+func newTestServer(t *testing.T, llm *fakeLLM) http.Handler {
+	t.Helper()
+	return newTestAPI(t, llm).routes()
 }
 
 const rankBody = `{"notes":[{"swara":"Sa","durationMs":900},{"swara":"Pa","durationMs":900}],"candidates":[{"name":"Hamsadhwani","matchCount":5,"alienCount":0,"phraseMatches":1,"score":9}]}`

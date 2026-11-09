@@ -42,6 +42,7 @@ rejected. Lesson titles are reduced to one short line with no quotes.
 | `tasks.go` | Request types, validation and prompt builders for the four tasks |
 | `evidence.go` | Turns note events into the swara evidence text (ported from `Viveka.jsx`) |
 | `ratelimit.go` | Redis limiter, in-memory limiter, and the fallback between them |
+| `metrics.go` | Prometheus request, latency, rate-limit and Redis-fallback metrics |
 | `vertex.go` | Vertex AI `generateContent` client and Google credentials |
 | `ragas.go`, `ragas.json` | The verified raga dictionary, embedded in the binary |
 
@@ -71,6 +72,7 @@ Most people run it with the rest of the app: `docker compose up --build` from th
 | `ALLOWED_ORIGINS` | No; comma-separated, added to localhost:5173 and alapana.vercel.app | |
 | `AI_BURST_LIMIT`, `AI_DAILY_LIMIT` | No | 20 a minute, 120 a day |
 | `PORT` | No (Cloud Run sets it) | `8080` |
+| `METRICS_ADDR` | No; serves Prometheus `/metrics` on its own listener, such as `:9090`, never on the public port | Off |
 
 ## Deploy to Cloud Run
 

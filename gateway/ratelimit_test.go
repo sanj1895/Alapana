@@ -6,6 +6,8 @@ import (
 	"time"
 
 	"github.com/alicebob/miniredis/v2"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/testutil"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -72,15 +74,20 @@ func (failingLimiter) Allow(context.Context, string) (Decision, error) {
 
 func TestFallbackLimiterUsesMemoryWhenRedisFails(t *testing.T) {
 	now := time.Now()
+	fallbacks := prometheus.NewCounter(prometheus.CounterOpts{Name: "test_fallbacks_total"})
 	l := &fallbackLimiter{
 		primary:   failingLimiter{},
 		secondary: newMemoryLimiter(testWindows, func() time.Time { return now }),
 		log:       discardLogger(),
+		fallbacks: fallbacks,
 	}
 	ctx := context.Background()
 	l.Allow(ctx, "user_1")
 	l.Allow(ctx, "user_1")
 	if d, err := l.Allow(ctx, "user_1"); err != nil || d.Allowed {
 		t.Fatalf("limits should still apply when Redis is down, got %+v, %v", d, err)
+	}
+	if got := testutil.ToFloat64(fallbacks); got != 3 {
+		t.Fatalf("every fallback should be counted, got %v", got)
 	}
 }

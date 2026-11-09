@@ -37,6 +37,7 @@ type server struct {
 	origins map[string]bool
 	dict    *dictionary
 	log     *slog.Logger
+	metrics *metrics
 }
 
 func (s *server) routes() http.Handler {
@@ -48,7 +49,7 @@ func (s *server) routes() http.Handler {
 	mux.HandleFunc("OPTIONS /api/ai/{task}", func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusNoContent)
 	})
-	mux.Handle("POST /api/ai/{task}", s.auth.Middleware(http.HandlerFunc(s.handleTask)))
+	mux.Handle("POST /api/ai/{task}", s.metrics.instrument(s.auth.Middleware(http.HandlerFunc(s.handleTask))))
 	return s.withSecurity(mux)
 }
 
@@ -98,6 +99,7 @@ func (s *server) handleTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if !decision.Allowed {
+		s.metrics.rateLimited.WithLabelValues(decision.Scope).Inc()
 		retry := int(math.Ceil(decision.RetryAfter.Seconds()))
 		w.Header().Set("Retry-After", strconv.Itoa(retry))
 		writeJSON(w, http.StatusTooManyRequests, map[string]any{

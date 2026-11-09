@@ -7,6 +7,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -39,7 +40,7 @@ func quotaWindows(cfg config) []window {
 
 // newLimiter uses Redis when REDIS_URL is set, so every instance shares one
 // count. Without it, each instance counts on its own.
-func newLimiter(cfg config, logger *slog.Logger) (Limiter, error) {
+func newLimiter(cfg config, logger *slog.Logger, fallbacks prometheus.Counter) (Limiter, error) {
 	windows := quotaWindows(cfg)
 	memory := newMemoryLimiter(windows, time.Now)
 	if cfg.RedisURL == "" {
@@ -58,6 +59,7 @@ func newLimiter(cfg config, logger *slog.Logger) (Limiter, error) {
 		primary:   &redisLimiter{client: redis.NewClient(opts), windows: windows},
 		secondary: memory,
 		log:       logger,
+		fallbacks: fallbacks,
 	}, nil
 }
 
@@ -114,6 +116,7 @@ type fallbackLimiter struct {
 	primary   Limiter
 	secondary Limiter
 	log       *slog.Logger
+	fallbacks prometheus.Counter
 }
 
 func (l *fallbackLimiter) Allow(ctx context.Context, userID string) (Decision, error) {
@@ -122,6 +125,7 @@ func (l *fallbackLimiter) Allow(ctx context.Context, userID string) (Decision, e
 		return d, nil
 	}
 	l.log.Warn("redis rate limiter unavailable, using in-memory limits", "error", err)
+	l.fallbacks.Inc()
 	return l.secondary.Allow(ctx, userID)
 }
 

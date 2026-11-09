@@ -37,6 +37,7 @@ type config struct {
 	CredentialsB64 string
 	ClerkSecretKey string
 	RedisURL       string
+	MetricsAddr    string
 	AllowedOrigins []string
 	BurstLimit     int
 	DailyLimit     int
@@ -54,6 +55,7 @@ func loadConfig() (config, error) {
 		CredentialsB64: os.Getenv("GOOGLE_CREDENTIALS_B64"),
 		ClerkSecretKey: os.Getenv("CLERK_SECRET_KEY"),
 		RedisURL:       os.Getenv("REDIS_URL"),
+		MetricsAddr:    os.Getenv("METRICS_ADDR"),
 		AllowedOrigins: append([]string{}, defaultOrigins...),
 	}
 	for _, origin := range strings.Split(os.Getenv("ALLOWED_ORIGINS"), ",") {
@@ -101,7 +103,8 @@ func run(logger *slog.Logger) error {
 	if err != nil {
 		return err
 	}
-	limiter, err := newLimiter(cfg, logger)
+	m := newMetrics()
+	limiter, err := newLimiter(cfg, logger, m.redisFallbacks)
 	if err != nil {
 		return err
 	}
@@ -114,6 +117,7 @@ func run(logger *slog.Logger) error {
 		origins: toSet(cfg.AllowedOrigins),
 		dict:    dict,
 		log:     logger,
+		metrics: m,
 	}
 	httpServer := &http.Server{
 		Addr:              ":" + cfg.Port,
@@ -124,11 +128,25 @@ func run(logger *slog.Logger) error {
 		IdleTimeout:       60 * time.Second,
 	}
 
-	errs := make(chan error, 1)
+	errs := make(chan error, 2)
 	go func() {
 		logger.Info("gateway listening", "port", cfg.Port, "model", cfg.Model, "redis", cfg.RedisURL != "")
 		errs <- httpServer.ListenAndServe()
 	}()
+
+	// Metrics get their own listener so the public port never serves them.
+	var metricsServer *http.Server
+	if cfg.MetricsAddr != "" {
+		metricsServer = &http.Server{
+			Addr:              cfg.MetricsAddr,
+			Handler:           m.handler(),
+			ReadHeaderTimeout: 5 * time.Second,
+		}
+		go func() {
+			logger.Info("metrics listening", "addr", cfg.MetricsAddr)
+			errs <- metricsServer.ListenAndServe()
+		}()
+	}
 
 	select {
 	case err := <-errs:
@@ -137,6 +155,9 @@ func run(logger *slog.Logger) error {
 		// Cloud Run sends SIGTERM and allows 10 seconds to finish in-flight requests.
 		shutdownCtx, cancel := context.WithTimeout(context.Background(), 9*time.Second)
 		defer cancel()
+		if metricsServer != nil {
+			defer metricsServer.Close()
+		}
 		return httpServer.Shutdown(shutdownCtx)
 	}
 }

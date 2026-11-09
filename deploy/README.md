@@ -123,7 +123,7 @@ Install Argo CD and point it at the repo:
 ```bash
 kubectl create namespace argocd
 kubectl apply -n argocd --server-side --force-conflicts \
-  -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+  -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.6.1/manifests/install.yaml
 kubectl -n argocd rollout status deploy/argocd-server
 
 kubectl apply -n argocd -f deploy/argocd/applications.yaml

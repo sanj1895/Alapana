@@ -1,6 +1,6 @@
-// Local stand-in for Vercel's Node runtime, so `npm run dev:api` (or Docker
-// Compose) serves the api/ functions without the Vercel CLI. Production still
-// runs on Vercel; this file is never deployed.
+// Local stand-in for Vercel's Node runtime, so `npm run dev:api`, Docker
+// Compose and the local Kubernetes deployment (deploy/) serve the api/
+// functions without the Vercel CLI. Production still runs on Vercel.
 //
 // It adds the request/response helpers the handlers rely on: req.body,
 // req.query, res.status() and res.json().
@@ -52,6 +52,8 @@ function addVercelHelpers(res) {
 const server = http.createServer(async (req, res) => {
   addVercelHelpers(res);
   const url = new URL(req.url, 'http://localhost');
+  // Kubernetes probes. Not under /api/, so the Ingress never exposes it.
+  if (url.pathname === '/health') return res.status(200).json({ ok: true });
   const name = url.pathname.match(/^\/api\/([a-z-]+)\/?$/)?.[1];
 
   if (!name || !ROUTES.has(name)) {
@@ -71,6 +73,10 @@ const server = http.createServer(async (req, res) => {
     console.log(`${req.method} ${url.pathname} → ${res.statusCode}`);
   }
 });
+
+// As PID 1 in a container, Node ignores SIGTERM unless it handles it, and
+// Kubernetes would wait the full grace period before killing the pod.
+process.on('SIGTERM', () => server.close(() => process.exit(0)));
 
 server.listen(PORT, () => {
   console.log(`API dev server on http://localhost:${PORT} · routes: ${[...ROUTES].join(', ')}`);

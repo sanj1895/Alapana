@@ -1,0 +1,15 @@
+# Production image for the Node API functions (api/*.js), served by
+# server/dev-server.js. Used by the local Kubernetes deployment in deploy/;
+# Vercel still serves api/ in production. Secrets come from the cluster at runtime.
+
+FROM node:22-alpine
+WORKDIR /app
+ENV NODE_ENV=production
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev && npm cache clean --force
+COPY api ./api
+COPY server ./server
+# Numeric, so Kubernetes can verify runAsNonRoot (uid 1000 is "node").
+USER 1000:1000
+EXPOSE 3001
+CMD ["node", "server/dev-server.js"]

@@ -42,7 +42,7 @@ helm repo add traefik https://traefik.github.io/charts
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 
-helm install traefik traefik/traefik -n traefik --create-namespace -f deploy/values/traefik.yaml
+helm install traefik traefik/traefik --version 42.3.1 -n traefik --create-namespace -f deploy/values/traefik.yaml
 ```
 
 Traefik is the Ingress controller because ingress-nginx was retired in March 2026.

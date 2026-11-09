@@ -29,9 +29,46 @@ func TestMetricsCountTasksByStatus(t *testing.T) {
 			t.Errorf("requests{task=%q,code=%q} = %v, want %v", tc.task, tc.code, got, tc.want)
 		}
 	}
-	if n := testutil.CollectAndCount(s.metrics.duration); n != 2 {
-		t.Errorf("duration should have series for rank-ragas and unknown, got %d", n)
+	body := scrape(t, s.metrics)
+	for _, want := range []string{
+		`alapana_gateway_request_duration_seconds_count{task="rank-ragas"} 2`,
+		`alapana_gateway_request_duration_seconds_count{task="unknown"} 1`,
+	} {
+		if !strings.Contains(body, want) {
+			t.Errorf("metrics output missing %q", want)
+		}
 	}
+}
+
+// A series that first appears at 1 shows no increase to rate(), so every
+// expected series must exist at 0 before the first request.
+func TestMetricsStartExpectedSeriesAtZero(t *testing.T) {
+	body := scrape(t, newMetrics())
+	var want []string
+	for name := range tasks {
+		want = append(want,
+			`alapana_gateway_requests_total{code="200",task="`+name+`"} 0`,
+			`alapana_gateway_requests_total{code="502",task="`+name+`"} 0`,
+			`alapana_gateway_request_duration_seconds_count{task="`+name+`"} 0`,
+		)
+	}
+	want = append(want,
+		`alapana_gateway_requests_total{code="404",task="unknown"} 0`,
+		`alapana_gateway_rate_limited_total{scope="burst"} 0`,
+		`alapana_gateway_rate_limited_total{scope="daily"} 0`,
+	)
+	for _, w := range want {
+		if !strings.Contains(body, w) {
+			t.Errorf("fresh metrics missing %q", w)
+		}
+	}
+}
+
+func scrape(t *testing.T, m *metrics) string {
+	t.Helper()
+	rec := httptest.NewRecorder()
+	m.handler().ServeHTTP(rec, httptest.NewRequest(http.MethodGet, "/metrics", nil))
+	return rec.Body.String()
 }
 
 func TestMetricsCountRateLimits(t *testing.T) {
@@ -49,9 +86,7 @@ func TestMetricsHandlerServesSeries(t *testing.T) {
 	s := newTestAPI(t, &fakeLLM{reply: `{"top_matches":[{"raagam":"Hamsadhwani"}]}`})
 	post(s.routes(), "/api/ai/rank-ragas", "user_1", "", rankBody)
 
-	rec := httptest.NewRecorder()
-	s.metrics.handler().ServeHTTP(rec, httptest.NewRequest(http.MethodGet, "/metrics", nil))
-	body := rec.Body.String()
+	body := scrape(t, s.metrics)
 	for _, want := range []string{
 		`alapana_gateway_requests_total{code="200",task="rank-ragas"} 1`,
 		"alapana_gateway_request_duration_seconds_bucket",

@@ -48,7 +48,37 @@ func newMetrics() *metrics {
 		collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}),
 		m.requests, m.duration, m.rateLimited, m.redisFallbacks,
 	)
+	m.startSeriesAtZero()
 	return m
+}
+
+// Status codes the AI route returns for a known task.
+var taskStatusCodes = []int{
+	http.StatusOK,
+	http.StatusBadRequest,
+	http.StatusUnauthorized,
+	http.StatusTooManyRequests,
+	http.StatusBadGateway,
+	http.StatusServiceUnavailable,
+}
+
+// startSeriesAtZero creates every expected labelled series with a value of 0.
+// Prometheus's rate() and increase() cannot see a series that first appears
+// already at 1, so without this the first request of each kind is lost and
+// latency quantiles come out as NaN until the second one.
+func (m *metrics) startSeriesAtZero() {
+	for name := range tasks {
+		m.duration.WithLabelValues(name)
+		for _, code := range taskStatusCodes {
+			m.requests.WithLabelValues(name, strconv.Itoa(code))
+		}
+	}
+	m.duration.WithLabelValues("unknown")
+	m.requests.WithLabelValues("unknown", strconv.Itoa(http.StatusUnauthorized))
+	m.requests.WithLabelValues("unknown", strconv.Itoa(http.StatusNotFound))
+	for _, w := range quotaWindows(config{}) {
+		m.rateLimited.WithLabelValues(w.Name)
+	}
 }
 
 func (m *metrics) handler() http.Handler {
